@@ -31,6 +31,11 @@ export default function ParentSummaryModal({ studentId, studentName, summary: pr
       });
   }, [studentId, propSummary]);
 
+  // Don't render modal if no active summary or student ID
+  if (!propSummary && !studentId) {
+    return null;
+  }
+
   const handleCopy = () => {
     const textToCopy = localizedText || summaryText || '';
     if (navigator.clipboard) {
@@ -48,16 +53,16 @@ export default function ParentSummaryModal({ studentId, studentName, summary: pr
           <div className="modal-title">
             <span>💬</span> Share Progress with Parent
           </div>
-          <button className="modal-close-icon" onClick={onClose}>&times;</button>
+          <button type="button" className="modal-close-icon" onClick={onClose}>&times;</button>
         </div>
 
         <div className="modal-body">
           <p className="modal-subtitle">
-            Localized message for {studentName || 'student'}'s parents (ready for WhatsApp / SMS):
+            Localized message for {studentName || 'student'}&apos;s parents (ready for WhatsApp / SMS):
           </p>
 
           {loading && (
-            <div className="modal-loading" style={{ padding: '20px', textAlgn: 'center' }}>
+            <div className="modal-loading" style={{ padding: '20px', textAlign: 'center' }}>
               <span className="spinner" /> Generating localized summary...
             </div>
           )}
@@ -83,10 +88,10 @@ export default function ParentSummaryModal({ studentId, studentName, summary: pr
         </div>
 
         <div className="modal-footer">
-          <button className="btn-secondary" onClick={onClose}>
+          <button type="button" className="btn-secondary" onClick={onClose}>
             Close
           </button>
-          <button className="btn-primary" onClick={handleCopy} disabled={!summaryText}>
+          <button type="button" className="btn-primary" onClick={handleCopy} disabled={!summaryText}>
             {copied ? '✓ Copied!' : '📋 Copy Message'}
           </button>
         </div>

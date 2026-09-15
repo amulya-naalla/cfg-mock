@@ -242,12 +242,14 @@ export default function StudentDetail() {
         )}
       </div>
 
-      {/* Parent Summary Modal (Person C integration) */}
-      <ParentSummaryModal
-        summary={summary}
-        studentName={studentName}
-        onClose={() => setSummary(null)}
-      />
+      {/* Parent Summary Modal */}
+      {Boolean(summary) && (
+        <ParentSummaryModal
+          summary={summary}
+          studentName={studentName}
+          onClose={() => setSummary(null)}
+        />
+      )}
     </div>
   );
 }
