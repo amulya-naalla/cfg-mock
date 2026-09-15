@@ -19,6 +19,7 @@ import ApiConfigModal from './components/ApiConfigModal.jsx';
 import { EDUCATOR_PROFILE, CONFIG } from './config.js';
 import { getCurrentStudent, langLabel } from './utils/student.js';
 import { LocalStore } from './data/mockData.js';
+import { t } from './utils/i18n.js';
 import api from './api/api.js';
 
 function initialsOf(name) {
@@ -144,7 +145,7 @@ export default function App() {
                 onClick={() => navigate('/login')}
                 title="Sign out of current role"
               >
-                Sign Out
+                {t('sign_out', activeLang)}
               </button>
             </div>
 
@@ -166,17 +167,17 @@ export default function App() {
         <nav className="app-nav">
           {activeRole === 'educator' && (
             <>
-              <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
-              <NavLink to="/students" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Students</NavLink>
-              <NavLink to="/assessments/new" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>+ Assessment</NavLink>
-              <NavLink to="/content" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Content</NavLink>
+              <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('dashboard', activeLang)}</NavLink>
+              <NavLink to="/students" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('students', activeLang)}</NavLink>
+              <NavLink to="/assessments/new" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('add_assessment', activeLang)}</NavLink>
+              <NavLink to="/content" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('content', activeLang)}</NavLink>
             </>
           )}
           {activeRole === 'student' && (
             <>
-              <NavLink to="/student" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Student Dashboard</NavLink>
-              <NavLink to="/student/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Learning Modules</NavLink>
-              <NavLink to="/content" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Resources</NavLink>
+              <NavLink to="/student" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('student_dashboard', activeLang)}</NavLink>
+              <NavLink to="/student/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('learning_modules', activeLang)}</NavLink>
+              <NavLink to="/student/resources" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>{t('resources', activeLang)}</NavLink>
             </>
           )}
           {activeRole === 'parent' && (
@@ -209,6 +210,7 @@ export default function App() {
           {/* Student View Routes */}
           <Route path="/student" element={<StudentDashboard />} />
           <Route path="/student/learn" element={<StudentLearn />} />
+          <Route path="/student/resources" element={<StudentLearn />} />
 
           {/* Parent View Routes */}
           <Route path="/parent" element={<ParentHome />} />
