@@ -5387,3 +5387,39 @@ button {
   .nd-grid { grid-template-columns: 1fr; grid-template-areas: "kpi" "cluster" "subject" "trend" "sessions"; }
   .nd-kpi-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* ── Student lesson picker: icon-first, 44px+ targets, vertical flow ──── */
+.stu-lesson-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 4px 0 20px;
+}
+
+.stu-lesson-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 18px 10px 14px;
+  border-radius: 14px;
+  border: 2px solid var(--color-border-dark, #cbd5e1);
+  background: var(--color-surface, #fff);
+  cursor: pointer;
+  text-align: left;
+}
+
+.stu-lesson-btn.is-active {
+  border-color: var(--color-primary, #2563eb);
+  background: var(--color-primary-light, #eff6ff);
+}
+
+.stu-lesson-icon { font-size: 26px; line-height: 1; }
+.stu-lesson-text { display: flex; flex-direction: column; }
+.stu-lesson-title { font-weight: 700; font-size: 15px; }
+.stu-lesson-sub { font-size: 12.5px; color: var(--color-text-muted, #64748b); }
+
+@media (max-width: 560px) {
+  .stu-lesson-picker { flex-direction: column; }
+  .stu-lesson-btn { width: 100%; }
+}
