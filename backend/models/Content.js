@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const contentSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    body: { type: String, required: true },
-    language: { type: String, default: 'en' },
-    translations: {
-      type: Map,
-      of: String,
+    subject: { type: String, required: true },
+    grade_level: { type: Number },
+    original_text: { type: String, required: true },
+    localized_text: {
+      type: Object,
       default: {},
     },
   },
