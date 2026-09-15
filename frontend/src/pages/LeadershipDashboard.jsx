@@ -85,24 +85,26 @@ function ProgressRing({ percent, size = 110, strokeWidth = 11, color = "#1bbc9d"
   );
 }
 
-function ActivityBarChart({ data }) {
-  const max  = Math.max(...data.map((d) => d.avg), 100);
-  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-  const bars = days.map((day, i) => {
-    const d = data[i % data.length];
-    return { day, value: d.avg, cluster: d.cluster };
-  });
+// One bar per real cluster, labelled with that cluster's actual name.
+// (Previously this rendered cluster averages under Mon–Sun weekday labels, which
+// presented real scores as fake per-day activity.)
+function ClusterScoreChart({ data }) {
+  const max = Math.max(...data.map((d) => d.avg), 100);
   return (
     <div className="act-chart">
-      {bars.map((b, i) => {
-        const heightPct = (b.value / max) * 100;
-        const hi = i >= days.length - 2;
+      {data.map((d) => {
+        const heightPct = (d.avg / max) * 100;
+        const status = clusterStatus(d.avg);
         return (
-          <div className="act-bar-col" key={b.day}>
+          <div className="act-bar-col" key={d.cluster}>
             <div className="act-bar-track">
-              <div className={`act-bar-fill${hi ? " act-bar-highlight" : ""}`} style={{ height: `${heightPct}%` }} title={`${b.value}%`} />
+              <div
+                className={`act-bar-fill${status === "good" ? " act-bar-highlight" : ""}`}
+                style={{ height: `${heightPct}%` }}
+                title={`${d.cluster}: ${Math.round(d.avg)} average score`}
+              />
             </div>
-            <span className="act-bar-label">{b.day}</span>
+            <span className="act-bar-label">{d.cluster}</span>
           </div>
         );
       })}
@@ -313,42 +315,31 @@ export default function Dashboard() {
           {/* ACTIVITY – grid area: activity */}
           <section className="card nd-card nd-activity-card" style={{ gridArea: 'activity' }}>
             <div className="nd-card-header">
-              <h2 className="nd-section-title">Activity</h2>
-              <span className="nd-pill">This week ▾</span>
+              <h2 className="nd-section-title">Average Score by Cluster</h2>
             </div>
-            <span className="nd-activity-trend">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 15l-6-6-6 6" /></svg>
-              +{statusCounts.good * 3}% increase than last week
-            </span>
             <div className="nd-activity-meta">
               <span className="nd-big-num">{summary.totalStudents}</span>
               <span className="nd-big-label">Students tracked</span>
             </div>
-            <ActivityBarChart data={summary.avgScoreByCluster} />
+            <ClusterScoreChart data={summary.avgScoreByCluster} />
           </section>
 
           {/* PROGRESS – grid area: progress */}
           <section className="card nd-card nd-progress-card" style={{ gridArea: 'progress' }}>
             <div className="nd-card-header">
-              <h2 className="nd-section-title">Progress</h2>
-              <span className="nd-pill">This week ▾</span>
+              <h2 className="nd-section-title">On Track</h2>
             </div>
             <div className="nd-progress-body">
               <div className="nd-progress-ring-wrap">
-                <p className="nd-progress-ring-label">Progress</p>
+                <p className="nd-progress-ring-label">On track</p>
                 <ProgressRing
                   percent={100 - summary.percentFlagged}
                   color={flaggedHigh ? "#c1543f" : "#1bbc9d"}
                   trackColor="#e8f8f5"
                 />
                 <div className="nd-mini-trend">
-                  <div className="nd-mini-trend-pill">
-                    <svg width="28" height="16" viewBox="0 0 28 16" fill="none">
-                      <polyline points="0,14 7,9 14,11 21,4 28,6" stroke="#94a3b8" strokeWidth="2" fill="none"/>
-                    </svg>
-                  </div>
                   <span className="nd-mini-trend-label">
-                    {Math.round(summary.percentFlagged)}%<br /><small>Last week</small>
+                    {Math.round(summary.percentFlagged)}%<br /><small>currently needing support</small>
                   </span>
                 </div>
               </div>
@@ -361,7 +352,7 @@ export default function Dashboard() {
                   </span>
                   <div>
                     <div className="nd-stat-num">{statusCounts.good}</div>
-                    <div className="nd-stat-lbl">Completed</div>
+                    <div className="nd-stat-lbl">Clusters on track</div>
                   </div>
                 </div>
                 <div className="nd-stat-row">
@@ -371,8 +362,8 @@ export default function Dashboard() {
                     </svg>
                   </span>
                   <div>
-                    <div className="nd-stat-num">{statusCounts.watch + summary.totalStudents}</div>
-                    <div className="nd-stat-lbl">In Progress</div>
+                    <div className="nd-stat-num">{statusCounts.watch}</div>
+                    <div className="nd-stat-lbl">Clusters to watch</div>
                   </div>
                 </div>
                 <div className="nd-stat-row">
@@ -382,8 +373,8 @@ export default function Dashboard() {
                     </svg>
                   </span>
                   <div>
-                    <div className="nd-stat-num">{statusCounts.risk + 14}</div>
-                    <div className="nd-stat-lbl">Upcoming</div>
+                    <div className="nd-stat-num">{statusCounts.risk}</div>
+                    <div className="nd-stat-lbl">Clusters at risk</div>
                   </div>
                 </div>
               </div>
@@ -441,18 +432,16 @@ export default function Dashboard() {
                       <div className="nd-course-meta-row">
                         <span className="nd-course-meta-item">
                           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-                          {s.attendance_count}
-                        </span>
-                        <span className="nd-course-meta-item">
-                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                          90 min
+                          {formatDate(s.date)}
                         </span>
                         <span className="nd-course-meta-item">
                           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="9" cy="8" r="3"/><path d="M3 18c.9-3 3.3-5 6-5s5.1 2 6 5"/><circle cx="17" cy="8" r="3"/><path d="M21 18c-.9-3-3.3-5-6-5"/></svg>
-                          {s.attendance_count}
+                          {s.attendance_count} attended
                         </span>
                       </div>
-                      <div className="nd-course-progress-label">{pct}% Finish</div>
+                      <div className="nd-course-progress-label">
+                        {avg != null ? `${Math.round(avg)} avg score in ${s.cluster}` : "No scores yet"}
+                      </div>
                       <div className="nd-course-progress-bar">
                         <div className="nd-course-progress-fill" style={{ width: `${pct}%`, background: clr }} />
                       </div>
