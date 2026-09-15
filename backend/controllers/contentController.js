@@ -81,4 +81,29 @@ async function translateAll(req, res) {
   res.json({ lang, count: results.length, results });
 }
 
-module.exports = { getContent, translateContent, translateAll };
+async function submitQuiz(req, res) {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: 'Invalid content id format' });
+  }
+
+  const content = await Content.findById(req.params.id);
+  if (!content) return res.status(404).json({ error: 'Content not found' });
+
+  if (!Array.isArray(content.quiz) || content.quiz.length === 0) {
+    return res.status(400).json({ error: 'This content has no quiz' });
+  }
+
+  const { answers } = req.body;
+  if (!Array.isArray(answers) || answers.length !== content.quiz.length) {
+    return res.status(400).json({
+      error: `answers must be an array of ${content.quiz.length} option indices`,
+    });
+  }
+
+  const results = content.quiz.map((q, i) => ({ correct: answers[i] === q.correct_index }));
+  const score = results.filter((r) => r.correct).length;
+
+  res.json({ score, total: content.quiz.length, results });
+}
+
+module.exports = { getContent, translateContent, translateAll, submitQuiz };

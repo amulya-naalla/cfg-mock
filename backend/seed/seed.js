@@ -280,6 +280,28 @@ async function seed() {
         { id: '3', depth: 0, text: 'You write a fraction as numerator over denominator, like 3/8.' },
         { id: '4', depth: 0, text: 'You read 3/8 aloud as "three eighths".' },
       ],
+      quiz: [
+        {
+          question: 'In the fraction 3/8, what is the numerator?',
+          options: ['3', '8', '11', '0'],
+          correct_index: 0,
+        },
+        {
+          question: 'What does the denominator tell you?',
+          options: [
+            'How many parts you have',
+            'How many equal parts make up the whole',
+            'The name of the fraction',
+            'Whether the fraction is big',
+          ],
+          correct_index: 1,
+        },
+        {
+          question: 'How do you read the fraction 3/8 aloud?',
+          options: ['Three eighths', 'Eight thirds', 'Three over eight parts', 'Thirty-eight'],
+          correct_index: 0,
+        },
+      ],
     },
     {
       title: 'Reading Comprehension Basics',

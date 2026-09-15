@@ -23,6 +23,19 @@ const contentSchema = new mongoose.Schema(
         parent_id: { type: String },
       },
     ],
+    quiz: [
+      {
+        question: { type: String, required: true },
+        options: {
+          type: [String],
+          validate: {
+            validator: (v) => Array.isArray(v) && v.length === 4,
+            message: 'options must have exactly 4 entries',
+          },
+        },
+        correct_index: { type: Number, required: true, min: 0, max: 3 },
+      },
+    ],
   },
   { timestamps: true }
 );
