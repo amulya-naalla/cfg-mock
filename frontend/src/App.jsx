@@ -1,29 +1,60 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import StudentList from './pages/StudentList.jsx';
-import StudentDetail from './pages/StudentDetail.jsx';
-import NewAssessmentForm from './pages/NewAssessmentForm.jsx';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import Landing from './pages/Landing.jsx';
+import Login from './pages/Login.jsx';
 import ContentScreen from './pages/ContentScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import ParentHome from './pages/ParentHome.jsx';
+import ParentChild from './pages/ParentChild.jsx';
+
+// Owned by Frontend 1 — placeholder only so /educator routes somewhere during solo Frontend 2 work.
+function EducatorPlaceholder() {
+  return (
+    <div>
+      <div className="topbar">
+        <Link to="/" className="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+          Home
+        </Link>
+      </div>
+      <p>Educator view — built by Frontend 1.</p>
+    </div>
+  );
+}
+
+function StudentPlaceholder() {
+  return (
+    <div>
+      <div className="topbar">
+        <Link to="/" className="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+          Home
+        </Link>
+      </div>
+      <p>Student view — to be implemented.</p>
+    </div>
+  );
+}
 
 export default function App() {
-  return (
-    <div className="app">
-      <nav className="app-nav">
-        <Link to="/">Students</Link>
-        <Link to="/assessments/new">New Assessment</Link>
-        <Link to="/content">Content</Link>
-        <Link to="/dashboard">Dashboard</Link>
-      </nav>
+  const location = useLocation();
+  const isFullWidth = location.pathname === '/' || location.pathname.startsWith('/login');
 
-      <main className="app-main">
-        <Routes>
-          <Route path="/" element={<StudentList />} />
-          <Route path="/students/:id" element={<StudentDetail />} />
-          <Route path="/assessments/new" element={<NewAssessmentForm />} />
-          <Route path="/content" element={<ContentScreen />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </main>
-    </div>
+  return (
+    <main className={isFullWidth ? '' : 'app-main'}>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login/:role" element={<Login />} />
+        <Route path="/educator" element={<EducatorPlaceholder />} />
+        <Route path="/student" element={<StudentPlaceholder />} />
+        <Route path="/leadership" element={<Dashboard />} />
+        <Route path="/content/:id" element={<ContentScreen />} />
+        <Route path="/parent" element={<ParentHome />} />
+        <Route path="/parent/:studentId" element={<ParentChild />} />
+      </Routes>
+    </main>
   );
 }
