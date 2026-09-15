@@ -5990,6 +5990,195 @@ button {
   opacity: 0.9;
 }
 
+/* ==========================================================================
+   ASSIGN TO STUDENT MODAL & PICKER STYLES
+   ========================================================================== */
+
+.assign-student-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.assign-search-box {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.assign-search-box .search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.assign-search-input {
+  width: 100%;
+  padding: 9px 36px 9px 36px;
+  font-size: 13.5px;
+  font-weight: 500;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+  background: #ffffff;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.assign-search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.assign-filter-pill {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.assign-filter-pill:hover,
+.assign-filter-pill.active {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.assign-student-picker-container {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
+.assign-student-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assign-student-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.assign-student-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.06);
+}
+
+.assign-student-card.is-selected {
+  background: #eff6ff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.assign-student-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.assign-student-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.assign-student-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.assign-student-meta {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.assign-student-badge-col {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.assign-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+  transition: all 0.15s ease;
+}
+
+.assign-checkbox.checked {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.assign-selected-banner {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  color: #047857;
+  font-size: 13px;
+}
+
+.assign-empty-state {
+  text-align: center;
+  padding: 30px 10px;
+  color: #64748b;
+  font-size: 13.5px;
+}
+
+
 
 
 
