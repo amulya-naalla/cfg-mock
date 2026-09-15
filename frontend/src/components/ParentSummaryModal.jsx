@@ -1,13 +1,24 @@
 import { useState } from 'react';
 
+const LANGUAGE_NAMES = {
+  ta: 'Tamil',
+  hi: 'Hindi',
+  te: 'Telugu',
+  kn: 'Kannada',
+  en: 'English',
+};
+
 export default function ParentSummaryModal({ summary, studentName, onClose }) {
   const [copied, setCopied] = useState(false);
 
   if (!summary) return null;
 
-  const handleCopy = () => {
+  const { en, localized, language } = summary;
+  const hasLocalized = localized && language && language !== 'en';
+
+  const handleCopy = (text) => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(summary).then(() => {
+      navigator.clipboard.writeText(text).then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2500);
       });
@@ -26,12 +37,19 @@ export default function ParentSummaryModal({ summary, studentName, onClose }) {
 
         <div className="modal-body">
           <p className="modal-subtitle">
-            Localized message for {studentName || 'student'}'s parents (ready for WhatsApp / SMS):
+            Message for {studentName || 'student'}&rsquo;s parents (ready for WhatsApp / SMS):
           </p>
 
+          {hasLocalized && (
+            <div className="whatsapp-box">
+              <div className="whatsapp-header-badge">🟢 {LANGUAGE_NAMES[language] || language}</div>
+              <div className="whatsapp-text">{localized}</div>
+            </div>
+          )}
+
           <div className="whatsapp-box">
-            <div className="whatsapp-header-badge">🟢 WhatsApp Message Preview</div>
-            <div className="whatsapp-text">{summary}</div>
+            <div className="whatsapp-header-badge">🟢 English</div>
+            <div className="whatsapp-text">{en}</div>
             <div className="whatsapp-time">
               {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ✓✓
             </div>
@@ -42,7 +60,7 @@ export default function ParentSummaryModal({ summary, studentName, onClose }) {
           <button className="btn-secondary" onClick={onClose}>
             Close
           </button>
-          <button className="btn-primary" onClick={handleCopy}>
+          <button className="btn-primary" onClick={() => handleCopy(hasLocalized ? localized : en)}>
             {copied ? '✓ Copied!' : '📋 Copy Message'}
           </button>
         </div>

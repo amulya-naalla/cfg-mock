@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { LineChart, Line, ResponsiveContainer, Tooltip, YAxis } from 'recharts';
 import client, { GRADE_BENCHMARKS } from '../api/client.js';
 import ParentSummaryModal from '../components/ParentSummaryModal.jsx';
 import FlagBadge from '../components/FlagBadge.jsx';
@@ -8,6 +9,7 @@ export default function StudentDetail() {
   const { id } = useParams();
   const [student, setStudent] = useState(null);
   const [assessments, setAssessments] = useState([]);
+  const [scoreTrend, setScoreTrend] = useState([]);
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generatingSummary, setGeneratingSummary] = useState(false);
@@ -40,6 +42,15 @@ export default function StudentDetail() {
       } finally {
         setLoading(false);
       }
+
+      // scoreTrend (Phase 2 backend data) — additive fetch, doesn't touch the
+      // existing student/assessments loading above.
+      try {
+        const detailRes = await client.get(`/api/students/${id}`);
+        setScoreTrend(Array.isArray(detailRes.data.scoreTrend) ? detailRes.data.scoreTrend : []);
+      } catch (err) {
+        console.error('Failed to load score trend', err);
+      }
     }
 
     loadStudentAndAssessments();
@@ -50,11 +61,19 @@ export default function StudentDetail() {
     try {
       // Person C hand-off route: POST /api/students/:id/parent-summary
       const res = await client.post(`/api/students/${id}/parent-summary`);
-      setSummary(res.data.summary);
+      setSummary({
+        en: res.data.summary_en,
+        localized: res.data.summary_localized,
+        language: res.data.language,
+      });
     } catch (err) {
       console.error('Failed to generate summary', err);
       // Fallback
-      setSummary(`Progress report for ${student?.name || 'Student'}: Completed ${assessments.length} assessment(s).`);
+      setSummary({
+        en: `Progress report for ${student?.name || 'Student'}: Completed ${assessments.length} assessment(s).`,
+        localized: null,
+        language: 'en',
+      });
     } finally {
       setGeneratingSummary(false);
     }
@@ -124,6 +143,28 @@ export default function StudentDetail() {
             <span className="detail-value">{expectedBenchmark} pts</span>
           </div>
         </div>
+
+        {scoreTrend.length > 1 && (
+          <div className="score-sparkline-block">
+            <span className="detail-label">Score Trend</span>
+            <ResponsiveContainer width="100%" height={60}>
+              <LineChart data={scoreTrend}>
+                <YAxis hide domain={[0, 100]} />
+                <Tooltip
+                  formatter={(v, _n, item) => [`${v} pts`, item.payload.subject]}
+                  labelFormatter={(d) => new Date(d).toLocaleDateString()}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke={isFlagged ? 'var(--color-flagged-badge)' : 'var(--color-primary)'}
+                  strokeWidth={2}
+                  dot={{ r: 3 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
       </div>
 
       {/* Action Toolbar */}

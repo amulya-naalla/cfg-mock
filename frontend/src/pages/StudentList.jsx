@@ -41,7 +41,17 @@ export default function StudentList() {
             flagged: isFlagged,
             last_subject: latest?.subject || student.last_subject,
             last_score: latest?.score ?? student.last_score,
+            last_date: latest?.date || null,
           };
+        });
+
+        // Most-urgent-first: flagged students surface to the top, most
+        // recently flagged first, so an educator sees who needs attention now.
+        enriched.sort((a, b) => {
+          if (a.flagged !== b.flagged) return a.flagged ? -1 : 1;
+          const aTime = a.last_date ? new Date(a.last_date).getTime() : 0;
+          const bTime = b.last_date ? new Date(b.last_date).getTime() : 0;
+          return bTime - aTime;
         });
 
         setStudents(enriched);

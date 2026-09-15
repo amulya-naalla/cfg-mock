@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import FlagBadge from './FlagBadge.jsx';
 
 export default function StudentCard({ student }) {
   const id = student._id || student.id;
@@ -7,10 +6,17 @@ export default function StudentCard({ student }) {
 
   return (
     <Link to={`/students/${id}`} className={`student-card ${isFlagged ? 'is-flagged' : ''}`}>
+      <span
+        className={`status-dot ${isFlagged ? 'status-dot-danger' : 'status-dot-success'}`}
+        role="img"
+        aria-label={isFlagged ? 'Needs attention' : 'On track'}
+        title={isFlagged ? 'Needs attention' : 'On track'}
+      >
+        {isFlagged ? '🚩' : '✓'}
+      </span>
       <div className="student-card-info">
         <div className="student-name-row">
           <span className="student-name">{student.name}</span>
-          <FlagBadge flagged={isFlagged} showOnTrack={true} />
         </div>
         <div className="student-meta-row">
           <span className="meta-tag">Grade {student.grade}</span>
