@@ -1,0 +1,14 @@
+const mongoose = require('mongoose');
+
+const assessmentSchema = new mongoose.Schema(
+  {
+    student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
+    subject: { type: String, required: true },
+    score: { type: Number, required: true },
+    cluster: { type: String },
+    flagged: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model('Assessment', assessmentSchema);
