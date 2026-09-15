@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import client from '../api/client.js';
 
-function BackLink({ to = '/leadership', label = 'Dashboard' }) {
+// Neutral by default: this lesson view is opened from shared links by parents and
+// students, who must never be routed into the leadership dashboard.
+function BackLink({ to = '/', label = 'Home' }) {
   return (
     <div className="topbar">
       <Link to={to} className="back-link">
