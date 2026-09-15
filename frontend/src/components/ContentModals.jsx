@@ -55,41 +55,123 @@ export function PreviewModal({ content, onClose, onAssign }) {
 export function AssignModal({ content, onClose, onAssigned }) {
   const students = useMemo(() => LocalStore.getStudents(), []);
   const [studentId, setStudentId] = useState('');
+  const [search, setSearch] = useState('');
+  const [filterFlagged, setFilterFlagged] = useState(false);
   const [error, setError] = useState('');
+
+  const filteredStudents = useMemo(() => {
+    return students.filter((s) => {
+      if (filterFlagged && !s.flagged) return false;
+      if (search.trim()) {
+        const q = search.toLowerCase();
+        const matchName = s.name.toLowerCase().includes(q);
+        const matchGrade = String(s.grade || '').includes(q);
+        const matchCluster = String(s.cluster || '').toLowerCase().includes(q);
+        const matchLang = String(s.language || '').toLowerCase().includes(q);
+        return matchName || matchGrade || matchCluster || matchLang;
+      }
+      return true;
+    });
+  }, [students, search, filterFlagged]);
+
+  const selectedStudent = students.find((s) => s._id === studentId);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (!studentId) {
-      setError('Please choose a student.');
+      setError('Please select a student from the list.');
       return;
     }
-    const student = students.find((s) => s._id === studentId);
     LocalStore.addAssignment({ content_id: content._id, student_id: studentId });
-    onAssigned?.(student, content);
+    onAssigned?.(selectedStudent, content);
     onClose();
   }
 
   return (
-    <Modal title="Assign Content" icon="📚" onClose={onClose}>
+    <Modal title="Assign Content to Student" icon="📚" onClose={onClose} wide>
       <form onSubmit={handleSubmit}>
         <div className="modal-body">
           <div className="assign-content-summary">
             <strong>{content.title}</strong>
-            <span>{content.subject} • {LANG_LABELS[content.language]} • {content.difficulty} • {content.duration_min || 20} min</span>
+            <span>{content.subject} • {LANG_LABELS[content.language] || content.language} • {content.difficulty} • {content.duration_min || 20} min</span>
           </div>
           <FormError message={error} />
-          <Field label="Assign to student">
-            <select className="form-input select-input" value={studentId} onChange={(e) => setStudentId(e.target.value)}>
-              <option value="">Choose a student…</option>
-              {students.map((s) => (
-                <option key={s._id} value={s._id}>{s.name} — {studentMeta(s)}</option>
-              ))}
-            </select>
-          </Field>
+
+          {/* Search & Filter Toolbar */}
+          <div className="assign-student-toolbar">
+            <div className="assign-search-box">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                className="assign-search-input"
+                placeholder="Search student by name, grade, or cluster..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              {search && (
+                <button type="button" className="clear-search-btn" onClick={() => setSearch('')}>✕</button>
+              )}
+            </div>
+            <button
+              type="button"
+              className={`assign-filter-pill ${filterFlagged ? 'active' : ''}`}
+              onClick={() => setFilterFlagged((prev) => !prev)}
+            >
+              ⚠️ Needs Attention ({students.filter((s) => s.flagged).length})
+            </button>
+          </div>
+
+          {/* Custom Student Selector Grid */}
+          <div className="assign-student-picker-container">
+            {filteredStudents.length === 0 ? (
+              <div className="assign-empty-state">
+                No students match &quot;{search}&quot;. Try clearing filters.
+              </div>
+            ) : (
+              <div className="assign-student-grid">
+                {filteredStudents.map((s) => {
+                  const isSelected = s._id === studentId;
+                  const initials = s.name.split(' ').map((n) => n[0]).join('').substring(0, 2).toUpperCase();
+                  return (
+                    <div
+                      key={s._id}
+                      className={`assign-student-card ${isSelected ? 'is-selected' : ''}`}
+                      onClick={() => {
+                        setStudentId(s._id);
+                        setError('');
+                      }}
+                    >
+                      <div className="assign-student-avatar">{initials}</div>
+                      <div className="assign-student-info">
+                        <span className="assign-student-name">{s.name}</span>
+                        <span className="assign-student-meta">
+                          Grade {s.grade} • Age {s.age || '?'} • Cluster {s.cluster || 'A'} • {LANG_LABELS[s.language] || s.language}
+                        </span>
+                      </div>
+                      <div className="assign-student-badge-col">
+                        {s.flagged && <span className="flagged-badge">⚠️ Flagged</span>}
+                        <div className={`assign-checkbox ${isSelected ? 'checked' : ''}`}>
+                          {isSelected ? '✓' : ''}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {selectedStudent && (
+            <div className="assign-selected-banner">
+              🎯 Ready to assign to <strong>{selectedStudent.name}</strong> (Grade {selectedStudent.grade}, {LANG_LABELS[selectedStudent.language] || selectedStudent.language})
+            </div>
+          )}
         </div>
         <div className="modal-footer">
           <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
-          <button type="submit" className="btn-primary">Assign</button>
+          <button type="submit" className="btn-primary" disabled={!studentId}>
+            Assign Content
+          </button>
         </div>
       </form>
     </Modal>
