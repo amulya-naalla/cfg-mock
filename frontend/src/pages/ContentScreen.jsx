@@ -13,7 +13,7 @@ export default function ContentScreen() {
 
   async function handleTranslate() {
     const res = await client.post(`/api/content/${contentId}/translate`, { lang });
-    setContent((prev) => ({ ...prev, body: res.data.body }));
+    setContent((prev) => ({ ...prev, original_text: res.data.body }));
   }
 
   return (
@@ -26,7 +26,7 @@ export default function ContentScreen() {
       {content && (
         <div>
           <h2>{content.title}</h2>
-          <p>{content.body}</p>
+          <p>{content.original_text}</p>
         </div>
       )}
     </div>
