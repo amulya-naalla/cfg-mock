@@ -25,6 +25,9 @@ async function getStudentById(req, res) {
     const assessments = await Assessment.find({ student_id: req.params.id }).sort({ date: -1 });
     const studentObj = student.toObject();
     studentObj.assessments = assessments;
+    studentObj.scoreTrend = [...assessments]
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .map((a) => ({ date: a.date, score: a.score, subject: a.subject }));
     res.json(studentObj);
   } catch (err) {
     res.status(500).json({ error: err.message });
