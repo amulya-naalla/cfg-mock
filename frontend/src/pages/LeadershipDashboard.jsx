@@ -79,7 +79,7 @@ function ProgressRing({ percent, size = 110, strokeWidth = 11, color = "#1bbc9d"
         />
       </svg>
       <div className="pring-inner">
-        <span className="pring-value">{clamped}%</span>
+        <span className="pring-value">{Math.round(clamped)}%</span>
       </div>
     </div>
   );
@@ -348,7 +348,7 @@ export default function Dashboard() {
                     </svg>
                   </div>
                   <span className="nd-mini-trend-label">
-                    {summary.percentFlagged}%<br /><small>Last week</small>
+                    {Math.round(summary.percentFlagged)}%<br /><small>Last week</small>
                   </span>
                 </div>
               </div>

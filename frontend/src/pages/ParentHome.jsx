@@ -82,9 +82,27 @@ export default function ParentHome() {
 
   const load = useCallback(async () => {
     try {
-      const res = await client.get("/api/students");
-      const list = Array.isArray(res.data) ? res.data : res.data?.students;
-      if (!list?.length) throw new Error("empty");
+      const [studentsRes, assessmentsRes] = await Promise.all([
+        client.get("/api/students"),
+        client.get("/api/assessments"),
+      ]);
+      const rawStudents = Array.isArray(studentsRes.data) ? studentsRes.data : studentsRes.data?.students;
+      const rawAssessments = Array.isArray(assessmentsRes.data) ? assessmentsRes.data : [];
+      if (!rawStudents?.length) throw new Error("empty");
+
+      // The real backend returns bare student docs — no latestScore/flagged fields.
+      // Derive them from that student's most recent assessment, same as the educator's list.
+      const list = rawStudents.map((student) => {
+        const studentId = String(student._id || student.id);
+        const studentAsms = rawAssessments.filter((a) => String(a.student_id) === studentId);
+        const latest = studentAsms[studentAsms.length - 1];
+        return {
+          ...student,
+          latestScore: latest?.score ?? null,
+          flagged: latest ? Boolean(latest.flagged) : Boolean(student.flagged),
+          lastAssessed: latest?.date || null,
+        };
+      });
       setChildren(list);
     } catch {
       setChildren(MOCK_CHILDREN);
