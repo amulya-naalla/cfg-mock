@@ -4,8 +4,10 @@ const Assessment = require('../models/Assessment');
 
 async function getStudents(req, res) {
   try {
-    const { cluster } = req.query;
-    const filter = cluster ? { cluster } : {};
+    const { cluster, guardian_contact } = req.query;
+    const filter = {};
+    if (cluster) filter.cluster = cluster;
+    if (guardian_contact) filter.guardian_contact = guardian_contact;
     const students = await Student.find(filter);
     res.json(students);
   } catch (err) {

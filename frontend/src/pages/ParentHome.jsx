@@ -73,28 +73,49 @@ function ScoreRing({ score, size = 56 }) {
   );
 }
 
+// Hackathon stopgap, NOT real auth: there's no login/session system in this MVP, so we
+// simply ask for the guardian's phone number and trust it, then use it to scope which
+// students this "parent" can see. A real deployment needs actual authentication here.
+const PARENT_PHONE_KEY = "parentPhone";
+
 export default function ParentHome() {
+  const [parentPhone, setParentPhone] = useState(() => {
+    try {
+      return localStorage.getItem(PARENT_PHONE_KEY) || "";
+    } catch {
+      return "";
+    }
+  });
+  const [phoneInput, setPhoneInput] = useState("");
   const [children, setChildren] = useState(null);
   const [isMocked, setIsMocked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (phone) => {
+    setLoading(true);
+    setNotFound(false);
     try {
-      const [studentsRes, assessmentsRes] = await Promise.all([
-        client.get("/api/students"),
-        client.get("/api/assessments"),
-      ]);
+      const studentsRes = await client.get(`/api/students?guardian_contact=${encodeURIComponent(phone)}`);
       const rawStudents = Array.isArray(studentsRes.data) ? studentsRes.data : studentsRes.data?.students;
-      const rawAssessments = Array.isArray(assessmentsRes.data) ? assessmentsRes.data : [];
-      if (!rawStudents?.length) throw new Error("empty");
+      if (!rawStudents?.length) {
+        setChildren([]);
+        setNotFound(true);
+        return;
+      }
+
+      // Fetch each child's own assessments individually (not the whole system's) so no
+      // other family's assessment data ever reaches this browser.
+      const assessmentsByStudent = await Promise.all(
+        rawStudents.map((s) => client.get(`/api/assessments?student_id=${s._id}`).catch(() => ({ data: [] })))
+      );
 
       // The real backend returns bare student docs — no latestScore/flagged fields.
       // Derive them from that student's most recent assessment, same as the educator's list.
-      const list = rawStudents.map((student) => {
-        const studentId = String(student._id || student.id);
-        const studentAsms = rawAssessments.filter((a) => String(a.student_id) === studentId);
+      const list = rawStudents.map((student, i) => {
+        const studentAsms = Array.isArray(assessmentsByStudent[i].data) ? assessmentsByStudent[i].data : [];
         const latest = studentAsms[studentAsms.length - 1];
         return {
           ...student,
@@ -112,7 +133,53 @@ export default function ParentHome() {
     }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (parentPhone) load(parentPhone);
+  }, [parentPhone, load]);
+
+  function handlePhoneSubmit(e) {
+    e.preventDefault();
+    const trimmed = phoneInput.trim();
+    if (!trimmed) return;
+    try {
+      localStorage.setItem(PARENT_PHONE_KEY, trimmed);
+    } catch {
+      // localStorage unavailable (private mode etc.) — still proceed for this session
+    }
+    setParentPhone(trimmed);
+  }
+
+  function handleChangeNumber() {
+    try {
+      localStorage.removeItem(PARENT_PHONE_KEY);
+    } catch {
+      // ignore
+    }
+    setParentPhone("");
+    setChildren(null);
+  }
+
+  if (!parentPhone) {
+    return (
+      <div className="par-page par-identity-gate">
+        <div className="card par-identity-card">
+          <h1 className="par-greeting">Welcome 👋</h1>
+          <p className="par-subtitle">Enter your phone number to see your children&rsquo;s progress.</p>
+          <form onSubmit={handlePhoneSubmit} className="par-identity-form">
+            <input
+              type="tel"
+              placeholder="+91 98765 43210"
+              value={phoneInput}
+              onChange={(e) => setPhoneInput(e.target.value)}
+              autoFocus
+            />
+            <button type="submit" className="btn btn-primary">Continue</button>
+          </form>
+          <p className="par-identity-hint">Use the phone number your child&rsquo;s educator has on file.</p>
+        </div>
+      </div>
+    );
+  }
 
   const filtered = useMemo(() => {
     if (!children) return [];
@@ -151,6 +218,12 @@ export default function ParentHome() {
               </svg>
             </button>
           </div>
+          <button type="button" className="par-icon-btn" title="Not your account? Change number" onClick={handleChangeNumber}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </button>
           <Link to="/" className="par-icon-btn" title="Home">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
               <path d="M3 11.5 12 4l9 7.5" /><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9" />
@@ -158,6 +231,16 @@ export default function ParentHome() {
           </Link>
         </div>
       </header>
+
+      {/* no children found for this phone number */}
+      {!loading && notFound && (
+        <div className="par-banner">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M12 9v4M12 17h.01" /><circle cx="12" cy="12" r="9" />
+          </svg>
+          No children found for {parentPhone}. <button type="button" onClick={handleChangeNumber} className="par-link-btn">Try a different number</button>
+        </div>
+      )}
 
       {/* mocked banner */}
       {isMocked && (

@@ -5235,3 +5235,49 @@ button {
 .login-back:hover {
   color: var(--brand);
 }
+
+/* Parent identity gate (hackathon stopgap, not real auth) */
+.par-identity-gate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.par-identity-card {
+  max-width: 380px;
+  width: 100%;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.par-identity-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 12px;
+}
+
+.par-identity-form input {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d7dee6;
+  font-size: 15px;
+}
+
+.par-identity-hint {
+  font-size: 13px;
+  color: var(--ink-muted, #64748b);
+}
+
+.par-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}

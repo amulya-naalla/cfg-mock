@@ -42,8 +42,10 @@ async function seed() {
       district: 'Chennai',
       cluster: 'Chennai-South',
       language_pref: 'en',
-      guardian_name: 'Sundaram Natarajan',
-      guardian_contact: '+91 98765 43212',
+      // Same guardian_contact as Vijay Chandran below, on purpose — proves the
+      // parent-portal phone lookup correctly returns multiple children for one parent.
+      guardian_name: 'Chandran Muthu',
+      guardian_contact: '+91 98765 43213',
     },
     {
       name: 'Vijay Chandran',
