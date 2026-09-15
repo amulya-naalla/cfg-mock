@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, NavLink } from 'react-router-dom';
 import StudentList from './pages/StudentList.jsx';
 import StudentDetail from './pages/StudentDetail.jsx';
 import NewAssessmentForm from './pages/NewAssessmentForm.jsx';
@@ -45,22 +45,22 @@ export default function App() {
         </button>
       </header>
 
-      {/* Shared Navigation (preserved for Person A, B, C, D) */}
+      {/* Main navigation per scope: Dashboard | Content */}
       <nav className="app-nav">
-        <Link to="/" className="nav-link">Students</Link>
-        <Link to="/assessments/new" className="nav-link">+ New Assessment</Link>
-        <Link to="/content" className="nav-link">Content</Link>
-        <Link to="/dashboard" className="nav-link">Dashboard</Link>
+        <NavLink to="/dashboard" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
+        <NavLink to="/content" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Content</NavLink>
       </nav>
 
       {/* Main Content Area */}
       <main className="app-main">
         <Routes>
-          <Route path="/" element={<StudentList />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/content" element={<ContentScreen />} />
+          {/* Preserved routes (not in main nav) so existing flows keep working */}
+          <Route path="/students" element={<StudentList />} />
           <Route path="/students/:id" element={<StudentDetail />} />
           <Route path="/assessments/new" element={<NewAssessmentForm />} />
-          <Route path="/content" element={<ContentScreen />} />
-          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </main>
 
