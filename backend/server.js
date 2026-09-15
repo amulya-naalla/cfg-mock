@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 
 const studentsRouter = require('./routes/students');
 const assessmentsRouter = require('./routes/assessments');
+const sessionsRouter = require('./routes/sessions');
 const contentRouter = require('./routes/content');
 const dashboardRouter = require('./routes/dashboard');
 const parentSummaryRouter = require('./routes/parentSummary');
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/api/students', studentsRouter);
 app.use('/api/students', parentSummaryRouter);
 app.use('/api/assessments', assessmentsRouter);
+app.use('/api/sessions', sessionsRouter);
 app.use('/api/content', contentRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/_test', testTranslateRouter);

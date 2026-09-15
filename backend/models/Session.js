@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-// Read-only shape for Backend 1's `sessions` collection — confirm field names with them.
 const sessionSchema = new mongoose.Schema(
   {
-    cluster: { type: String },
-    topic: { type: String },
-    date: { type: Date },
-    attendance_count: { type: Number },
+    date: { type: Date, default: Date.now },
+    educator_id: { type: String, required: true },
+    cluster: { type: String, required: true },
+    topic: { type: String, required: true },
+    attendance_count: { type: Number, required: true, default: 0 },
   },
   { timestamps: true }
 );
