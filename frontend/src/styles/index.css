@@ -5763,3 +5763,60 @@ button {
   transform: translateY(-1px);
 }
 
+/* ==========================================================================
+   ROLE LOCK & SIGNOUT STYLES
+   ========================================================================== */
+
+.role-locked-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-locked-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.role-locked-pill.role-educator {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.role-locked-pill.role-student {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.role-locked-pill.role-parent {
+  background: #f5f3ff;
+  color: #6d28d9;
+  border: 1px solid #ddd6fe;
+}
+
+.header-logout-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 4px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.header-logout-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+

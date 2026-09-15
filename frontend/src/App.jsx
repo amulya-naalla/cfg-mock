@@ -33,11 +33,15 @@ function initialsOf(name) {
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState('educator'); // 'educator' | 'student'
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [isBackendOnline, setIsBackendOnline] = useState(false);
   const [currentApiUrl, setCurrentApiUrl] = useState(CONFIG.API_BASE_URL);
   const [student, setStudent] = useState(() => getCurrentStudent());
+
+  // Determine current active role strictly based on current path
+  const isStudentRoute = location.pathname.startsWith('/student');
+  const isParentRoute = location.pathname.startsWith('/parent');
+  const activeRole = isStudentRoute ? 'student' : isParentRoute ? 'parent' : 'educator';
 
   useEffect(() => {
     api.checkHealth().then((online) => {
@@ -45,19 +49,13 @@ export default function App() {
     });
   }, [currentApiUrl]);
 
-  function switchProfile(next) {
-    if (next === profile) return;
-    setProfile(next);
-    if (next === 'student') {
+  useEffect(() => {
+    if (isStudentRoute) {
       setStudent(getCurrentStudent());
-      navigate('/student');
-    } else {
-      navigate('/dashboard');
     }
-  }
+  }, [isStudentRoute]);
 
   const isFullWidth = location.pathname === '/' || location.pathname.startsWith('/login');
-  const isEducator = profile === 'educator';
 
   return (
     <div className="app">
@@ -68,7 +66,7 @@ export default function App() {
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 800, fontSize: '1.1rem', marginRight: '16px' }}>
               ✨ Visions India
             </Link>
-            {isEducator ? (
+            {activeRole === 'educator' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div className="educator-avatar">{initialsOf(EDUCATOR_PROFILE.name)}</div>
                 <div className="educator-details">
@@ -78,13 +76,25 @@ export default function App() {
                   </span>
                 </div>
               </div>
-            ) : (
+            )}
+            {activeRole === 'student' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div className="educator-avatar student-avatar">{initialsOf(student?.name)}</div>
                 <div className="educator-details">
-                  <span className="educator-name">{student?.name || 'Student'}</span>
+                  <span className="educator-name">{student?.name || 'Aarav Patil'}</span>
                   <span className="educator-role">
                     Logged in as Student{student ? ` • Grade ${student.grade} • ${langLabel(student.language)}` : ''}
+                  </span>
+                </div>
+              </div>
+            )}
+            {activeRole === 'parent' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="educator-avatar" style={{ background: '#7c3aed' }}>SP</div>
+                <div className="educator-details">
+                  <span className="educator-name">Sita Patil</span>
+                  <span className="educator-role">
+                    Logged in as Parent • Parent of Aarav Patil
                   </span>
                 </div>
               </div>
@@ -92,21 +102,17 @@ export default function App() {
           </div>
 
           <div className="header-right-group">
-            {/* Profile switcher */}
-            <div className="profile-switcher" role="group" aria-label="Switch profile">
+            {/* Strict Role Indicator & Sign Out */}
+            <div className="role-locked-container">
+              <span className={`role-locked-pill role-${activeRole}`}>
+                {activeRole === 'educator' ? '🧑‍🏫 Educator' : activeRole === 'student' ? '🎒 Student' : '👨‍👩‍👧 Parent'}
+              </span>
               <button
-                className={`profile-switch-btn ${isEducator ? 'is-active' : ''}`}
-                onClick={() => switchProfile('educator')}
-                title="Switch to educator profile"
+                className="header-logout-btn"
+                onClick={() => navigate('/login')}
+                title="Sign out of current role"
               >
-                🧑‍🏫 Educator
-              </button>
-              <button
-                className={`profile-switch-btn ${!isEducator ? 'is-active' : ''}`}
-                onClick={() => switchProfile('student')}
-                title="Switch to student profile"
-              >
-                🎒 Student
+                Sign Out
               </button>
             </div>
 
@@ -123,22 +129,28 @@ export default function App() {
         </header>
       )}
 
-      {/* Navigation (shown on subpages) */}
+      {/* Navigation (shown on subpages) - strictly isolated per role */}
       {!isFullWidth && (
         <nav className="app-nav">
-          {isEducator ? (
+          {activeRole === 'educator' && (
             <>
               <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
               <NavLink to="/students" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Students</NavLink>
               <NavLink to="/assessments/new" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>+ Assessment</NavLink>
               <NavLink to="/content" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Content</NavLink>
-              <NavLink to="/parent" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Parent Portal</NavLink>
             </>
-          ) : (
+          )}
+          {activeRole === 'student' && (
             <>
               <NavLink to="/student" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Student Dashboard</NavLink>
               <NavLink to="/student/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Learning Modules</NavLink>
               <NavLink to="/content" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Resources</NavLink>
+            </>
+          )}
+          {activeRole === 'parent' && (
+            <>
+              <NavLink to="/parent" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Child Progress</NavLink>
+              <NavLink to="/student" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Student View</NavLink>
             </>
           )}
         </nav>
