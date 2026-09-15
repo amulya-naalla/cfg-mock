@@ -18,6 +18,7 @@ import ParentChild from './pages/ParentChild.jsx';
 import ApiConfigModal from './components/ApiConfigModal.jsx';
 import { EDUCATOR_PROFILE, CONFIG } from './config.js';
 import { getCurrentStudent, langLabel } from './utils/student.js';
+import { LocalStore } from './data/mockData.js';
 import api from './api/api.js';
 
 function initialsOf(name) {
@@ -37,6 +38,7 @@ export default function App() {
   const [isBackendOnline, setIsBackendOnline] = useState(false);
   const [currentApiUrl, setCurrentApiUrl] = useState(CONFIG.API_BASE_URL);
   const [student, setStudent] = useState(() => getCurrentStudent());
+  const [activeLang, setActiveLang] = useState(() => student?.language || 'mr');
 
   // Determine current active role strictly based on current path
   const isStudentRoute = location.pathname.startsWith('/student');
@@ -51,9 +53,21 @@ export default function App() {
 
   useEffect(() => {
     if (isStudentRoute) {
-      setStudent(getCurrentStudent());
+      const cur = getCurrentStudent();
+      setStudent(cur);
+      if (cur?.language) setActiveLang(cur.language);
     }
   }, [isStudentRoute]);
+
+  function handleLangChange(newLang) {
+    setActiveLang(newLang);
+    if (student?._id) {
+      const updated = LocalStore.updateStudentLanguage(student._id, newLang);
+      if (updated) {
+        setStudent({ ...updated });
+      }
+    }
+  }
 
   const isFullWidth = location.pathname === '/' || location.pathname.startsWith('/login');
 
@@ -102,6 +116,24 @@ export default function App() {
           </div>
 
           <div className="header-right-group">
+            {/* Demo Local Language Selector */}
+            <div className="header-lang-wrapper" title="Switch Demo Local Language">
+              <span className="header-lang-icon">🌐</span>
+              <select
+                className="header-lang-select"
+                value={activeLang}
+                onChange={(e) => handleLangChange(e.target.value)}
+                aria-label="Select Local Language"
+              >
+                <option value="mr">Marathi (मराठी)</option>
+                <option value="ta">Tamil (தமிழ்)</option>
+                <option value="hi">Hindi (हिंदी)</option>
+                <option value="en">English (English)</option>
+                <option value="te">Telugu (తెలుగు)</option>
+                <option value="kn">Kannada (கன்னட)</option>
+              </select>
+            </div>
+
             {/* Strict Role Indicator & Sign Out */}
             <div className="role-locked-container">
               <span className={`role-locked-pill role-${activeRole}`}>

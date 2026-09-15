@@ -791,6 +791,18 @@ export const LocalStore = {
     return student;
   },
 
+  updateStudentLanguage(id, language) {
+    const students = this.getStudents();
+    const idx = students.findIndex((s) => String(s._id) === String(id));
+    if (idx !== -1) {
+      students[idx].language = language;
+      save(KEYS.students, students);
+      emit();
+      return students[idx];
+    }
+    return null;
+  },
+
   // ----- Assessments -----
   getAssessments() {
     return load(KEYS.assessments, INITIAL_ASSESSMENTS);

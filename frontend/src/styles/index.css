@@ -5819,4 +5819,40 @@ button {
   border-color: #94a3b8;
 }
 
+/* ==========================================================================
+   HEADER LOCAL LANGUAGE SELECTOR (DEMO)
+   ========================================================================== */
+
+.header-lang-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 3px 8px;
+  transition: border-color 0.15s ease;
+}
+
+.header-lang-wrapper:hover {
+  border-color: #94a3b8;
+  background: #ffffff;
+}
+
+.header-lang-icon {
+  font-size: 14px;
+}
+
+.header-lang-select {
+  border: none;
+  background: transparent;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  outline: none;
+  padding: 2px 0;
+}
+
+
 
