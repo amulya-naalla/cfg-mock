@@ -80,6 +80,14 @@ function ScoreRing({ score, size = 56 }) {
 // students this "parent" can see. A real deployment needs actual authentication here.
 const PARENT_PHONE_KEY = "parentPhone";
 
+// The API returns assessments newest-first (sorted date:-1), so index [length-1]
+// is the OLDEST record. Pick by max date instead, so this stays correct
+// regardless of any future change to the API's ordering.
+function latestOf(list) {
+  if (!Array.isArray(list) || list.length === 0) return undefined;
+  return list.reduce((a, b) => (new Date(b.date) > new Date(a.date) ? b : a));
+}
+
 export default function ParentHome() {
   const [parentPhone, setParentPhone] = useState(() => {
     try {
@@ -118,7 +126,7 @@ export default function ParentHome() {
       // Derive them from that student's most recent assessment, same as the educator's list.
       const list = rawStudents.map((student, i) => {
         const studentAsms = Array.isArray(assessmentsByStudent[i].data) ? assessmentsByStudent[i].data : [];
-        const latest = studentAsms[studentAsms.length - 1];
+        const latest = latestOf(studentAsms);
         return {
           ...student,
           latestScore: latest?.score ?? null,

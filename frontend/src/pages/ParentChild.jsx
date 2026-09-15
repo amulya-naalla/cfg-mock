@@ -99,7 +99,7 @@ function SubjectRing({ subject, score }) {
 
 function TrendChart({ assessments }) {
   if (!assessments.length) return null;
-  const sorted = [...assessments].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  const sorted = [...assessments].sort((a, b) => new Date(a.date || a.createdAt) - new Date(b.date || b.createdAt));
   const scores = sorted.map((a) => a.score);
   const min = 0, max = 100;
   const W = 260, H = 90, PAD = 10;
@@ -214,6 +214,14 @@ function SummaryPanel({ studentId, studentName }) {
 }
 
 /* ── main component ──────────────────────────────────────────── */
+// The API returns assessments newest-first (sorted date:-1), so index [length-1]
+// is the OLDEST record. Pick by max date instead, so this stays correct
+// regardless of any future change to the API's ordering.
+function latestOf(list) {
+  if (!Array.isArray(list) || list.length === 0) return undefined;
+  return list.reduce((a, b) => (new Date(b.date) > new Date(a.date) ? b : a));
+}
+
 export default function ParentChild() {
   const { studentId } = useParams();
   const navigate = useNavigate();
@@ -238,7 +246,7 @@ export default function ParentChild() {
       const stu = stuRes.data ?? fallbackStudent(studentId);
       // `flagged` lives on assessments, not on the student doc — derive it from the
       // most recent one, otherwise this always rendered the "all good" state.
-      const latest = asms[asms.length - 1];
+      const latest = latestOf(asms);
       setStudent({ ...stu, flagged: latest ? Boolean(latest.flagged) : Boolean(stu.flagged) });
       setAssessments(asms);
     } catch {
@@ -275,7 +283,7 @@ export default function ParentChild() {
   const recent = useMemo(() => {
     if (!assessments) return [];
     return [...assessments]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt))
       .slice(0, 5);
   }, [assessments]);
 
@@ -351,9 +359,9 @@ export default function ParentChild() {
           </div>
           {/* labels */}
           <div className="par-trend-x">
-            {[...assessments ?? []].sort((a,b) => new Date(a.createdAt)-new Date(b.createdAt)).map((a, i) => (
+            {[...assessments ?? []].sort((a,b) => new Date(a.date || a.createdAt)-new Date(b.date || b.createdAt)).map((a, i) => (
               <span key={i} className="par-trend-x-label">
-                {new Date(a.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                {new Date(a.date || a.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
               </span>
             ))}
           </div>
@@ -369,7 +377,7 @@ export default function ParentChild() {
                   <div className="par-assessment-info">
                     <span className="par-assessment-subj">{a.subject}</span>
                     <span className="par-assessment-date">
-                      {new Date(a.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      {new Date(a.date || a.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
                     </span>
                   </div>
                   <div className="par-assessment-score-wrap">

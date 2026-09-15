@@ -5,6 +5,14 @@ import client, { GRADE_BENCHMARKS } from '../api/client.js';
 import ParentSummaryModal from '../components/ParentSummaryModal.jsx';
 import FlagBadge from '../components/FlagBadge.jsx';
 
+// The API returns assessments newest-first (sorted date:-1), so index [length-1]
+// is the OLDEST record. Pick by max date instead, so this stays correct
+// regardless of any future change to the API's ordering.
+function latestOf(list) {
+  if (!Array.isArray(list) || list.length === 0) return undefined;
+  return list.reduce((a, b) => (new Date(b.date) > new Date(a.date) ? b : a));
+}
+
 export default function StudentDetail() {
   const { id } = useParams();
   const [student, setStudent] = useState(null);
@@ -29,7 +37,7 @@ export default function StudentDetail() {
         const current = studentsList.find((s) => String(s._id || s.id) === String(id));
 
         if (current) {
-          const latest = asms[asms.length - 1];
+          const latest = latestOf(asms);
           setStudent({
             ...current,
             flagged: latest ? Boolean(latest.flagged) : Boolean(current.flagged),
@@ -100,8 +108,9 @@ export default function StudentDetail() {
   const expectedBenchmark = GRADE_BENCHMARKS[grade] || 45;
   const isFlagged = Boolean(student?.flagged);
 
-  // Sort assessments newest first
-  const sortedAssessments = [...assessments].reverse();
+  // Newest first (the API already returns them that way; sort explicitly so this
+  // doesn't depend on the API's ordering).
+  const sortedAssessments = [...assessments].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
     <div className="student-detail-page">
@@ -219,7 +228,7 @@ export default function StudentDetail() {
         ) : (
           sortedAssessments.map((a) => {
             const asmFlagged = Boolean(a.flagged);
-            const dateStr = a.createdAt ? new Date(a.createdAt).toLocaleDateString() : 'Recent';
+            const dateStr = (a.date || a.createdAt) ? new Date(a.date || a.createdAt).toLocaleDateString() : 'Recent';
             return (
               <div key={a._id || Math.random()} className={`assessment-card ${asmFlagged ? 'flagged-record' : ''}`}>
                 <div className="asm-left">

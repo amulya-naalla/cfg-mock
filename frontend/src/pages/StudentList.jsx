@@ -2,6 +2,14 @@ import { useEffect, useState, useMemo } from 'react';
 import client from '../api/client.js';
 import StudentCard from '../components/StudentCard.jsx';
 
+// The API returns assessments newest-first (sorted date:-1), so index [length-1]
+// is the OLDEST record. Pick by max date instead, so this stays correct
+// regardless of any future change to the API's ordering.
+function latestOf(list) {
+  if (!Array.isArray(list) || list.length === 0) return undefined;
+  return list.reduce((a, b) => (new Date(b.date) > new Date(a.date) ? b : a));
+}
+
 export default function StudentList() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +37,7 @@ export default function StudentList() {
             : [];
           
           // Latest assessment
-          const latest = studentAsms[studentAsms.length - 1];
+          const latest = latestOf(studentAsms);
 
           // Determine flagged: either from student object or latest assessment
           const isFlagged = latest ? Boolean(latest.flagged) : Boolean(student.flagged);
