@@ -732,6 +732,33 @@ const KEYS = {
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
 
+export const INITIAL_CHATS = [
+  {
+    _id: 'chat-1',
+    student_id: 'stu-101',
+    sender: 'educator',
+    text: 'Hello Aarav! Great job completing the Math Addition Pack today! How did you find the Carry-Over questions?',
+    timestamp: '10:15 AM',
+    date: new Date().toISOString(),
+  },
+  {
+    _id: 'chat-2',
+    student_id: 'stu-101',
+    sender: 'student',
+    text: 'Thank you Rohan Sir! Question 3 was a little tricky, but I got 100% on practice!',
+    timestamp: '10:18 AM',
+    date: new Date().toISOString(),
+  },
+  {
+    _id: 'chat-3',
+    student_id: 'stu-101',
+    sender: 'educator',
+    text: 'Excellent effort! I assigned a new Marathi Reading Story for you. Feel free to ask me if you have any questions!',
+    timestamp: '10:20 AM',
+    date: new Date().toISOString(),
+  },
+];
+
 function load(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -801,6 +828,29 @@ export const LocalStore = {
       return students[idx];
     }
     return null;
+  },
+
+  // ----- Teacher - Student Chat -----
+  getChatMessages(studentId) {
+    const all = load('cfg_chat_messages', INITIAL_CHATS);
+    if (!studentId) return all;
+    return all.filter((c) => String(c.student_id) === String(studentId));
+  },
+
+  sendChatMessage({ student_id, sender, text }) {
+    const chats = load('cfg_chat_messages', INITIAL_CHATS);
+    const msg = {
+      _id: 'chat-' + Date.now(),
+      student_id,
+      sender, // 'student' | 'educator'
+      text,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      date: new Date().toISOString(),
+    };
+    chats.push(msg);
+    save('cfg_chat_messages', chats);
+    emit();
+    return msg;
   },
 
   // ----- Assessments -----

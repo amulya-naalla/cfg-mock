@@ -16,6 +16,7 @@ import ParentChild from './pages/ParentChild.jsx';
 
 // Components & Config
 import ApiConfigModal from './components/ApiConfigModal.jsx';
+import TeacherStudentChat from './components/TeacherStudentChat.jsx';
 import { EDUCATOR_PROFILE, CONFIG } from './config.js';
 import { getCurrentStudent, langLabel } from './utils/student.js';
 import { LocalStore } from './data/mockData.js';
@@ -220,6 +221,9 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+
+      {/* Teacher - Student Floating Chat Widget */}
+      {!isFullWidth && <TeacherStudentChat activeRole={activeRole} studentOverride={student} />}
 
       {/* API Config Modal */}
       <ApiConfigModal
