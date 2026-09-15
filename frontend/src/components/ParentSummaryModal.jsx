@@ -1,64 +1,93 @@
 import { useEffect, useState } from 'react';
 import client from '../api/client.js';
 
-export default function ParentSummaryModal({ studentId, onClose }) {
-  const [summary, setSummary] = useState(null);
+export default function ParentSummaryModal({ studentId, studentName, summary: propSummary, onClose }) {
+  const [summaryText, setSummaryText] = useState(propSummary || null);
+  const [localizedText, setLocalizedText] = useState(null);
+  const [loading, setLoading] = useState(!propSummary && Boolean(studentId));
   const [error, setError] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    if (propSummary) {
+      setSummaryText(propSummary);
+      setLoading(false);
+      return;
+    }
     if (!studentId) return;
-    setSummary(null);
+
+    setLoading(true);
     setError(null);
     client
       .post(`/api/students/${studentId}/parent-summary`)
-      .then((res) => setSummary(res.data))
-      .catch(() => setError('Could not generate a summary right now.'));
-  }, [studentId]);
+      .then((res) => {
+        setSummaryText(res.data.summary_en || res.data.summary || '');
+        setLocalizedText(res.data.summary_localized || null);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError('Could not generate parent summary right now.');
+        setLoading(false);
+      });
+  }, [studentId, propSummary]);
 
-  if (!studentId) return null;
+  const handleCopy = () => {
+    const textToCopy = localizedText || summaryText || '';
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      });
+    }
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <span className="modal-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-          </span>
-          <h2>Share with parent</h2>
+          <div className="modal-title">
+            <span>💬</span> Share Progress with Parent
+          </div>
+          <button className="modal-close-icon" onClick={onClose}>&times;</button>
         </div>
 
-        {error && (
-          <div className="error-banner">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 8v5M12 16h.01" />
-            </svg>
-            {error}
-          </div>
-        )}
+        <div className="modal-body">
+          <p className="modal-subtitle">
+            Localized message for {studentName || 'student'}'s parents (ready for WhatsApp / SMS):
+          </p>
 
-        {!error && !summary && (
-          <div className="modal-loading">
-            <span className="spinner" />
-            Generating summary...
-          </div>
-        )}
+          {loading && (
+            <div className="modal-loading" style={{ padding: '20px', textAlgn: 'center' }}>
+              <span className="spinner" /> Generating localized summary...
+            </div>
+          )}
 
-        {summary && (
-          <div className="modal-summary">
-            <p>{summary.summary_en}</p>
-            {summary.summary_localized && <p className="modal-summary-localized">{summary.summary_localized}</p>}
-          </div>
-        )}
+          {error && (
+            <div className="error-banner" style={{ padding: '12px', background: '#fee2e2', color: '#991b1b', borderRadius: '8px' }}>
+              {error}
+            </div>
+          )}
 
-        <div className="modal-actions">
-          <button className="btn btn-secondary" disabled title="Not wired up for the demo">
-            Send via SMS
-          </button>
-          <button className="btn btn-primary" onClick={onClose}>
+          {!loading && !error && summaryText && (
+            <div className="whatsapp-box">
+              <div className="whatsapp-header-badge">🟢 WhatsApp Message Preview</div>
+              <div className="whatsapp-text">
+                <p>{summaryText}</p>
+                {localizedText && <p style={{ marginTop: '8px', fontWeight: 600 }}>{localizedText}</p>}
+              </div>
+              <div className="whatsapp-time">
+                {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ✓✓
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button className="btn-secondary" onClick={onClose}>
             Close
+          </button>
+          <button className="btn-primary" onClick={handleCopy} disabled={!summaryText}>
+            {copied ? '✓ Copied!' : '📋 Copy Message'}
           </button>
         </div>
       </div>
