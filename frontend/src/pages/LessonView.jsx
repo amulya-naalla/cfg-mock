@@ -138,7 +138,7 @@ export default function ContentScreen({ contentId: contentIdProp, studentId, bac
         <div className={`card lang-card lang-card-ta ${!tamil ? 'lang-card-pending' : ''}`}>
           <div className="lang-card-header">
             <span className="lang-flag">TA</span>
-            Tamil
+            தமிழ்<span className="lang-card-native">Tamil</span>
           </div>
           {tamil ? (
             <p className="lang-card-body">{tamil}</p>

@@ -3300,11 +3300,37 @@ button {
   margin-top: 0.6rem;
 }
 
+/* Original + translation stack VERTICALLY, never in side-by-side columns:
+   Tamil is typically longer than English and wraps unpredictably, so columns
+   force uneven, hard-to-compare blocks (design constraint 2). */
 .content-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1.25rem;
   margin-top: 1.75rem;
+}
+
+/* Indic-safe typography: generous line-height and spacing, no assumption of
+   English/Tamil length parity. */
+.lang-card-body {
+  line-height: 2;
+  font-size: 1.02rem;
+  margin: 0;
+}
+
+.lang-card-body .step-list,
+.lang-card .step-list {
+  line-height: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lang-card-native {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-muted, #64748b);
+  margin-left: 0.4rem;
 }
 
 .lang-card {
