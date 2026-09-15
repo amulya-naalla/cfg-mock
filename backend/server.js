@@ -28,11 +28,30 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// 404 for unmatched API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Centralized error handler — any next(err) (including from asyncHandler-wrapped
+// routes) lands here instead of crashing the process or leaking a raw stack trace.
+app.use((err, req, res, next) => {
+  console.error(err);
+  const status = err.status || 500;
+  res.status(status).json({ error: err.message || 'Internal server error' });
+});
+
+if (!process.env.MONGODB_URI) {
+  console.error('Missing required environment variable: MONGODB_URI. Set it in backend/.env before starting the server.');
+  process.exit(1);
+}
+
 const PORT = process.env.PORT || 5000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
 connectDB()
   .then(() => {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () => console.log(`Server running on port ${PORT} (env: ${NODE_ENV})`));
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB', err);

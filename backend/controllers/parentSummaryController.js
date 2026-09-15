@@ -1,15 +1,20 @@
+const mongoose = require('mongoose');
 const Student = require('../models/Student');
 const Assessment = require('../models/Assessment');
 const { translateText } = require('../services/translate');
 
 async function generateParentSummary(req, res) {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: 'Invalid student id format' });
+  }
+
   const student = await Student.findById(req.params.id);
   if (!student) return res.status(404).json({ error: 'Student not found' });
 
   const [latest] = await Assessment.find({ student_id: student._id }).sort({ date: -1 }).limit(1);
 
   let summary_en;
-  if (!latest) {
+  if (!latest || typeof latest.score !== 'number' || !latest.subject) {
     summary_en = `${student.name} (Grade ${student.grade}) hasn't completed any assessments yet.`;
   } else {
     const note = latest.flagged ? "let's keep practicing." : 'great improvement!';

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Student = require('../models/Student');
 const Assessment = require('../models/Assessment');
 
@@ -14,6 +15,9 @@ async function getStudents(req, res) {
 
 async function getStudentById(req, res) {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid student id format' });
+    }
     const student = await Student.findById(req.params.id);
     if (!student) {
       return res.status(404).json({ error: 'Student not found' });
@@ -28,6 +32,11 @@ async function getStudentById(req, res) {
 }
 
 async function createStudent(req, res) {
+  const { name, grade } = req.body;
+  if (!name || grade === undefined || grade === null) {
+    return res.status(400).json({ error: 'name and grade are required' });
+  }
+
   try {
     const student = await Student.create(req.body);
     res.status(201).json(student);

@@ -1,8 +1,12 @@
+const mongoose = require('mongoose');
 const Content = require('../models/Content');
 const { translateText } = require('../services/translate');
 const { getStudentPace, maxDepthForPace } = require('../services/pace');
 
 async function getContent(req, res) {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: 'Invalid content id format' });
+  }
   const content = await Content.findById(req.params.id);
   if (!content) return res.status(404).json({ error: 'Content not found' });
 
@@ -28,10 +32,19 @@ async function getContent(req, res) {
 
 async function translateContent(req, res) {
   const lang = req.query.lang || req.body.lang;
-  if (!lang) return res.status(400).json({ error: 'lang param is required' });
+  if (!lang || typeof lang !== 'string') {
+    return res.status(400).json({ error: 'lang param is required' });
+  }
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: 'Invalid content id format' });
+  }
 
   const content = await Content.findById(req.params.id);
   if (!content) return res.status(404).json({ error: 'Content not found' });
+
+  if (typeof content.original_text !== 'string' || content.original_text.trim() === '') {
+    return res.status(400).json({ error: 'Content has no original_text to translate' });
+  }
 
   if (content.localized_text && content.localized_text[lang]) {
     return res.json(content);
