@@ -6178,6 +6178,175 @@ button {
   font-size: 13.5px;
 }
 
+/* ==========================================================================
+   EDUCATOR RECOMMENDED FOR STUDENTS PANEL STYLES
+   ========================================================================== */
+
+.educator-rec-panel {
+  border-top: 4px solid #2563eb;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.educator-rec-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.educator-rec-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.educator-rec-card:hover {
+  border-color: #93c5fd;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.08);
+}
+
+.educator-rec-student-col {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.educator-rec-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.educator-rec-student-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.educator-rec-student-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.educator-rec-student-meta {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.educator-rec-gap-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  padding: 2px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.educator-rec-arrow {
+  font-size: 18px;
+  color: #94a3b8;
+  font-weight: 700;
+}
+
+.educator-rec-content-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.educator-rec-content-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.educator-rec-content-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.educator-rec-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.educator-rec-reasons {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6d28d9;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  padding: 5px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.educator-rec-action-col {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.educator-rec-match-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.educator-rec-match-badge .match-pct {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.educator-rec-assign-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 8px;
+}
+
+
 
 
 

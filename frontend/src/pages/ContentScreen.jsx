@@ -188,35 +188,61 @@ export default function ContentScreen() {
 
       {/* Recommended for students */}
       {recommendations.length > 0 && (
-        <section className="panel panel-recommended">
+        <section className="panel educator-rec-panel">
           <div className="panel-header">
             <h2>🎯 Recommended for Students</h2>
             <span className="benchmark-note">age/grade + level + gap + language</span>
           </div>
-          <div className="recommend-list">
-            {recommendations.map(({ student, content: c, score, reasons }) => (
-              <div key={student._id} className="recommend-row">
-                <div className="recommend-who">
-                  <span className="recommend-student">{student.name}</span>
-                  <span className="recommend-why">
-                    {studentMetaShort(student)} · struggling with {SKILL_LABELS[student.primary_gap] || 'general'}
-                  </span>
+          <div className="educator-rec-grid">
+            {recommendations.map(({ student, content: c, score, reasons }) => {
+              const initials = student.name.split(' ').map((n) => n[0]).join('').substring(0, 2).toUpperCase();
+              const matchPct = Math.min(99, Math.round(score));
+              return (
+                <div key={student._id} className="educator-rec-card">
+                  <div className="educator-rec-student-col">
+                    <div className="educator-rec-avatar">{initials}</div>
+                    <div className="educator-rec-student-info">
+                      <span className="educator-rec-student-name">{student.name}</span>
+                      <span className="educator-rec-student-meta">
+                        Grade {student.grade} • Age {student.age || '?'}
+                      </span>
+                      <span className="educator-rec-gap-tag">
+                        Struggling: {SKILL_LABELS[student.primary_gap] || 'General'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="educator-rec-arrow">➔</div>
+
+                  <div className="educator-rec-content-col">
+                    <div className="educator-rec-content-head">
+                      <h4 className="educator-rec-content-title">{c.title}</h4>
+                      <div className="educator-rec-tags">
+                        <span className="meta-tag">{c.subject}</span>
+                        <span className="meta-tag">{LANG_LABELS[c.language] || c.language}</span>
+                        <span className={`difficulty-chip diff-${c.difficulty.toLowerCase()}`}>{c.difficulty}</span>
+                      </div>
+                    </div>
+                    <div className="educator-rec-reasons">
+                      ✨ {reasons.slice(0, 3).join(' • ')}
+                    </div>
+                  </div>
+
+                  <div className="educator-rec-action-col">
+                    <div className="educator-rec-match-badge">
+                      <span className="match-pct">{matchPct}%</span> Match
+                    </div>
+                    <button
+                      type="button"
+                      className="btn-primary educator-rec-assign-btn"
+                      onClick={() => setModal({ type: 'assign', content: c })}
+                    >
+                      Assign
+                    </button>
+                  </div>
                 </div>
-                <span className="recommend-arrow" aria-hidden="true">→</span>
-                <div className="recommend-what">
-                  <span className="recommend-title">{c.title}</span>
-                  <span className="recommend-why">
-                    {reasons.slice(0, 3).join(' · ')} · match {Math.min(99, Math.round(score))}%
-                  </span>
-                </div>
-                <button
-                  className="btn-secondary btn-sm"
-                  onClick={() => setModal({ type: 'assign', content: c })}
-                >
-                  Assign
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
