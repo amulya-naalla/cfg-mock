@@ -1,21 +1,59 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Landing from './pages/Landing.jsx';
+import Login from './pages/Login.jsx';
 import ContentScreen from './pages/ContentScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import ParentHome from './pages/ParentHome.jsx';
+import ParentChild from './pages/ParentChild.jsx';
 
 // Owned by Frontend 1 — placeholder only so /educator routes somewhere during solo Frontend 2 work.
 function EducatorPlaceholder() {
-  return <p>Educator view — built by Frontend 1.</p>;
+  return (
+    <div>
+      <div className="topbar">
+        <Link to="/" className="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+          Home
+        </Link>
+      </div>
+      <p>Educator view — built by Frontend 1.</p>
+    </div>
+  );
+}
+
+function StudentPlaceholder() {
+  return (
+    <div>
+      <div className="topbar">
+        <Link to="/" className="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+          Home
+        </Link>
+      </div>
+      <p>Student view — to be implemented.</p>
+    </div>
+  );
 }
 
 export default function App() {
+  const location = useLocation();
+  const isFullWidth = location.pathname === '/' || location.pathname.startsWith('/login');
+
   return (
-    <main className="app-main">
+    <main className={isFullWidth ? '' : 'app-main'}>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/login/:role" element={<Login />} />
         <Route path="/educator" element={<EducatorPlaceholder />} />
+        <Route path="/student" element={<StudentPlaceholder />} />
         <Route path="/leadership" element={<Dashboard />} />
         <Route path="/content/:id" element={<ContentScreen />} />
+        <Route path="/parent" element={<ParentHome />} />
+        <Route path="/parent/:studentId" element={<ParentChild />} />
       </Routes>
     </main>
   );
