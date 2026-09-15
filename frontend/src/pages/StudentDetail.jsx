@@ -16,24 +16,39 @@ export default function StudentDetail() {
     async function loadStudentAndAssessments() {
       setLoading(true);
       try {
-        // Fetch assessments for this student
-        const asmsRes = await client.get(`/api/assessments?student_id=${id}`);
-        const asms = Array.isArray(asmsRes.data) ? asmsRes.data : [];
-        setAssessments(asms);
+        // Try fetching rich Student 360 backend endpoint first
+        let s360 = null;
+        try {
+          const s360Res = await client.get(`/api/students/${id}/360`);
+          s360 = s360Res.data;
+        } catch (e) {
+          // Fallback if 360 not reached
+        }
 
-        // Fetch students list to find current student metadata
-        const studentsRes = await client.get('/api/students');
-        const studentsList = Array.isArray(studentsRes.data) ? studentsRes.data : [];
-        const current = studentsList.find((s) => String(s._id || s.id) === String(id));
+        if (s360 && s360.student) {
+          setStudent(s360.student);
+          setAssessments(s360.timeline?.filter((t) => t.type === 'assessment') || []);
+          setSummaryData(s360);
+        } else {
+          // Fetch assessments for this student
+          const asmsRes = await client.get(`/api/assessments?student_id=${id}`);
+          const asms = Array.isArray(asmsRes.data) ? asmsRes.data : [];
+          setAssessments(asms);
 
-        if (current) {
-          const latest = asms[asms.length - 1];
-          setStudent({
-            ...current,
-            flagged: latest ? Boolean(latest.flagged) : Boolean(current.flagged),
-            cluster: current.cluster || latest?.cluster || 'North-2',
-            district: current.district || 'Pune Rural',
-          });
+          // Fetch students list to find current student metadata
+          const studentsRes = await client.get('/api/students');
+          const studentsList = Array.isArray(studentsRes.data) ? studentsRes.data : [];
+          const current = studentsList.find((s) => String(s._id || s.id) === String(id));
+
+          if (current) {
+            const latest = asms[asms.length - 1];
+            setStudent({
+              ...current,
+              flagged: latest ? Boolean(latest.flagged) : Boolean(current.flagged),
+              cluster: current.cluster || latest?.cluster || 'North-2',
+              district: current.district || 'Chennai',
+            });
+          }
         }
       } catch (err) {
         console.error('Failed to load student detail', err);
@@ -44,6 +59,30 @@ export default function StudentDetail() {
 
     loadStudentAndAssessments();
   }, [id]);
+
+  const [summaryData, setSummaryData] = useState(null);
+  const [newNote, setNewNote] = useState('');
+  const [savingNote, setSavingNote] = useState(false);
+
+  async function handleAddNote(e) {
+    e.preventDefault();
+    if (!newNote.trim()) return;
+    setSavingNote(true);
+    try {
+      await client.post(`/api/students/${id}/notes`, {
+        educator_id: 'ED-101',
+        note: newNote.trim(),
+      });
+      setNewNote('');
+      // Reload 360 data
+      const s360Res = await client.get(`/api/students/${id}/360`);
+      setSummaryData(s360Res.data);
+    } catch (err) {
+      console.error('Failed to save note', err);
+    } finally {
+      setSavingNote(false);
+    }
+  }
 
   async function handleGenerateSummary() {
     setGeneratingSummary(true);
