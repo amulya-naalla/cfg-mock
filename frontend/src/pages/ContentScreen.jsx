@@ -1,34 +1,43 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import client from '../api/client.js';
 
 export default function ContentScreen() {
-  const [contentId, setContentId] = useState('');
-  const [lang, setLang] = useState('hi');
+  const { id } = useParams();
   const [content, setContent] = useState(null);
+  const [error, setError] = useState(null);
 
-  async function handleLoad() {
-    const res = await client.get(`/api/content/${contentId}`);
-    setContent(res.data);
-  }
+  useEffect(() => {
+    setContent(null);
+    setError(null);
+    client
+      .get(`/api/content/${id}`)
+      .then((res) => setContent(res.data))
+      .catch(() => setError('Could not load this lesson.'));
+  }, [id]);
 
-  async function handleTranslate() {
-    const res = await client.post(`/api/content/${contentId}/translate`, { lang });
-    setContent((prev) => ({ ...prev, body: res.data.body }));
-  }
+  if (error) return <p>{error}</p>;
+  if (!content) return <p>Loading...</p>;
+
+  const tamil = content.localized_text?.ta;
 
   return (
     <div>
-      <h1>Content</h1>
-      <input placeholder="Content ID" value={contentId} onChange={(e) => setContentId(e.target.value)} />
-      <button onClick={handleLoad}>Load</button>
-      <input placeholder="Language code" value={lang} onChange={(e) => setLang(e.target.value)} />
-      <button onClick={handleTranslate}>Translate</button>
-      {content && (
-        <div>
-          <h2>{content.title}</h2>
-          <p>{content.body}</p>
+      <h1>{content.title}</h1>
+      <p className="content-meta">
+        {content.subject} · Grade {content.grade_level}
+      </p>
+
+      <div className="content-columns">
+        <div className="content-column">
+          <h2>English</h2>
+          <p>{content.original_text}</p>
         </div>
-      )}
+        <div className="content-column">
+          <h2>Tamil</h2>
+          {tamil ? <p>{tamil}</p> : <p className="content-pending">Translation pending</p>}
+        </div>
+      </div>
     </div>
   );
 }

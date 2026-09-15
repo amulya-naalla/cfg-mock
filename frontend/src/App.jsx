@@ -1,29 +1,22 @@
-import { Routes, Route, Link } from 'react-router-dom';
-import StudentList from './pages/StudentList.jsx';
-import StudentDetail from './pages/StudentDetail.jsx';
-import NewAssessmentForm from './pages/NewAssessmentForm.jsx';
+import { Routes, Route } from 'react-router-dom';
+import Landing from './pages/Landing.jsx';
 import ContentScreen from './pages/ContentScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 
+// Owned by Frontend 1 — placeholder only so /educator routes somewhere during solo Frontend 2 work.
+function EducatorPlaceholder() {
+  return <p>Educator view — built by Frontend 1.</p>;
+}
+
 export default function App() {
   return (
-    <div className="app">
-      <nav className="app-nav">
-        <Link to="/">Students</Link>
-        <Link to="/assessments/new">New Assessment</Link>
-        <Link to="/content">Content</Link>
-        <Link to="/dashboard">Dashboard</Link>
-      </nav>
-
-      <main className="app-main">
-        <Routes>
-          <Route path="/" element={<StudentList />} />
-          <Route path="/students/:id" element={<StudentDetail />} />
-          <Route path="/assessments/new" element={<NewAssessmentForm />} />
-          <Route path="/content" element={<ContentScreen />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </main>
-    </div>
+    <main className="app-main">
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/educator" element={<EducatorPlaceholder />} />
+        <Route path="/leadership" element={<Dashboard />} />
+        <Route path="/content/:id" element={<ContentScreen />} />
+      </Routes>
+    </main>
   );
 }
