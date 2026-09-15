@@ -33,6 +33,7 @@ export function PreviewModal({ content, onClose, onAssign }) {
           <span className="meta-tag">Grade {content.grades.join('–')}</span>
           <span className="meta-tag">{content.difficulty}</span>
           <span className="meta-tag">Skill: {SKILL_LABELS[content.skill] || content.skill}</span>
+          <span className="meta-tag">⏱ {content.duration_min || 20} min</span>
         </div>
         <p className="preview-description">{content.description}</p>
         <div className="preview-body">
@@ -74,7 +75,7 @@ export function AssignModal({ content, onClose, onAssigned }) {
         <div className="modal-body">
           <div className="assign-content-summary">
             <strong>{content.title}</strong>
-            <span>{content.subject} • {LANG_LABELS[content.language]} • {content.difficulty}</span>
+            <span>{content.subject} • {LANG_LABELS[content.language]} • {content.difficulty} • {content.duration_min || 20} min</span>
           </div>
           <FormError message={error} />
           <Field label="Assign to student">
@@ -166,6 +167,7 @@ export function CreateContentModal({ onClose, onCreated }) {
     topic: '',
     type: 'Explanation',
     skill: 'reading',
+    duration_min: '20',
     description: '',
     body: '',
   });
@@ -278,9 +280,23 @@ export function CreateContentModal({ onClose, onCreated }) {
             </Field>
           </div>
 
-          <Field label="Short description (optional)">
-            <input className="form-input" value={form.description} onChange={set('description')} placeholder="One line shown on the content card" />
-          </Field>
+          <div className="form-grid-2">
+            <Field label="Estimated duration (minutes)">
+              <input
+                className="form-input"
+                type="number"
+                min="5"
+                max="120"
+                step="5"
+                value={form.duration_min}
+                onChange={set('duration_min')}
+                placeholder="e.g. 20"
+              />
+            </Field>
+            <Field label="Short description (optional)">
+              <input className="form-input" value={form.description} onChange={set('description')} placeholder="One line shown on the content card" />
+            </Field>
+          </div>
 
           <Field label="Content body">
             <textarea

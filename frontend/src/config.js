@@ -36,6 +36,13 @@ export const CONFIG = {
     badge: 'Field Educator #408'
   },
 
+  // The student profile is a SEPARATE login from the educator profile.
+  // Its identity comes from the matching LocalStore student record.
+  STUDENT: {
+    id: 'stu-101',
+    role: 'Student',
+  },
+
   GRADE_BENCHMARKS: {
     '1': 40,
     '2': 45,
@@ -53,3 +60,4 @@ export const CONFIG = {
 export const GRADE_BENCHMARKS = CONFIG.GRADE_BENCHMARKS;
 export const SUBJECTS = CONFIG.SUBJECTS;
 export const EDUCATOR_PROFILE = CONFIG.EDUCATOR;
+export const STUDENT_PROFILE = CONFIG.STUDENT;

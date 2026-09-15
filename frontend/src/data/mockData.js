@@ -330,6 +330,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'reading',
     level: 'beginner',
+    duration_min: 20,
     description:
       'Short Tamil passages with picture-based questions to build core comprehension skills step by step.',
     body: `Read the short passage and answer the questions.\n\nPassage: Meena wakes up early every morning. She helps her mother water the plants before school. After school, she reads a storybook for twenty minutes.\n\n1. What does Meena do every morning?\n2. How long does Meena read?\n3. What kind of child is Meena?`,
@@ -346,6 +347,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'math',
     level: 'beginner',
+    duration_min: 25,
     description:
       'Marathi worksheets moving from number bonds to two-digit carry-over problems with worked examples.',
     body: `Solve the following.\n\n1) 12 + 7 = __\n2) 25 + 14 = __\n3) 30 − 8 = __\n4) 47 − 19 = __\n5) A shopkeeper had 34 mangoes and sold 16. How many are left?`,
@@ -362,6 +364,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'reading',
     level: 'beginner',
+    duration_min: 15,
     description:
       'Cut-out picture cards students arrange in order, then narrate the story in their own words.',
     body: `Print and cut the 4 picture cards. Ask the student to:\n\n1. Arrange the cards from first to last.\n2. Tell the story aloud in their own words.\n3. Give the story a title.`,
@@ -378,6 +381,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'verbal',
     level: 'beginner',
+    duration_min: 20,
     description:
       'Circle-time prompts where each student describes a daily object to build spoken fluency and confidence.',
     body: `Sit in a circle. Pass an object around.\n\n1. Name the object.\n2. Say one thing you do with it.\n3. Say one thing it is NOT used for.\n4. Listen and repeat one sentence a classmate said.`,
@@ -394,6 +398,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'math',
     level: 'intermediate',
+    duration_min: 15,
     description:
       'Visual explainer using folded paper and rotis to introduce halves, thirds and quarters before numerals.',
     body: `Video walkthrough (6 min):\n\n1. Fold a paper into 2 equal parts — each is one half.\n2. Fold again — four quarters.\n3. Compare 1/2 of a roti vs 1/4 of the same roti. Which is bigger?\n4. Practice: shade 1/2, 1/3 and 3/4 on worksheet squares.`,
@@ -410,6 +415,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Advanced',
     skill: 'cognitive',
     level: 'advanced',
+    duration_min: 30,
     description:
       'Number and shape patterns that stretch reasoning: find the rule, continue the sequence, justify the answer.',
     body: `Find the rule and continue each pattern:\n\n1) 2, 4, 8, 16, __\n2) 1, 4, 9, 16, __\n3) 3, 8, 5, 10, 7, 12, __\n4) Draw the next figure in the dot-pattern series and explain your rule aloud.`,
@@ -426,6 +432,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'written',
     level: 'intermediate',
+    duration_min: 25,
     description:
       'Guided frames that take students from a topic sentence to a full 5-sentence paragraph with a checklist.',
     body: `Use the frames to write one paragraph on "My Village":\n\n1. Topic sentence: My village is ____.\n2. Add one thing you can see there.\n3. Add one thing you like about it.\n4. Add one thing you would change.\n5. Ending sentence: ____.`,
@@ -442,6 +449,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'reading',
     level: 'beginner',
+    duration_min: 18,
     description:
       'Marathi letter-sound drills with mouth-shape cues for first-generation learners starting from zero.',
     body: `For each letter:\n\n1. Say the sound (not the letter name) — hold it for 2 seconds.\n2. Show the mouth shape in a mirror.\n3. Find 3 objects in the room that start with this sound.\n4. Trace the letter in air, then on paper.`,
@@ -458,6 +466,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'cognitive',
     level: 'intermediate',
+    duration_min: 20,
     description:
       'Working-memory circle games (recall sequences, spot the removed object) that underpin math fluency.',
     body: `Game 1 — Kim's game: place 8 objects, students close eyes, remove one. "What is missing?"\n\nGame 2 — Sequence echo: clap a rhythm, students repeat it, then extend by one clap.\n\nGame 3 — Number chain: each student repeats the chain and adds one number: 3 → 3,7 → 3,7,1 …`,
@@ -474,6 +483,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'written',
     level: 'beginner',
+    duration_min: 15,
     description:
       'Picture prompts with who/what/where scaffolds so students write complete sentences before paragraphs.',
     body: `Look at each picture. Answer:\n\n1. Who is in the picture?\n2. What are they doing?\n3. Where is it happening?\n\nNow write it all as ONE sentence: ____ ____ ____.`,
@@ -490,6 +500,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'reading',
     level: 'intermediate',
+    duration_min: 20,
     description:
       'Word-family and match-the-meaning drills in Tamil for students reading below grade level.',
     body: `Match the word to its meaning, then use each word in your own sentence:\n\n1. நீர் (water) — ____\n2. பள்ளி (school) — ____\n3. நண்பன் (friend) — ____\n4. ஓடு (run) — ____`,
@@ -506,6 +517,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'verbal',
     level: 'beginner',
+    duration_min: 25,
     description:
       'Sock-puppet retelling of folk tales to develop sentence formation and expressive speech.',
     body: `1. Tell a short folk tale with two puppets.\n2. Students take one puppet each and retell the tale.\n3. Ask: what happens next? Let them invent a new ending.\n4. Praise full sentences, not correct grammar.`,
@@ -522,6 +534,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'math',
     level: 'intermediate',
+    duration_min: 20,
     description:
       'Skip-counting ladders and rapid-recall drills from ×2 to ×10, with weekly progress tracking.',
     body: `Ladder 1: count in 2s to 20, then fill: 2, 4, __, 8, __\nLadder 2: count in 5s to 50, then fill: 5, 10, __, 20, __\nLadder 3: rapid recall — 45 seconds per table, beat your own score.`,
@@ -538,6 +551,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'reading',
     level: 'intermediate',
+    duration_min: 30,
     description:
       'Paired repeated-reading routine in Hindi: same passage, four reads, tracking words per minute.',
     body: `Paired fluency routine:\n\n1. Teacher models reading the passage aloud.\n2. Student reads the same passage aloud — mark words per minute.\n3. Student re-reads 2 more times silently then aloud.\n4. Compare: did wpm improve? Celebrate the gain, not perfection.`,
@@ -554,6 +568,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'math',
     level: 'beginner',
+    duration_min: 15,
     description:
       'Hands-on counting, grouping and comparing with beads/stones before any written numerals.',
     body: `1. Count out 10 beads. Group them into 2s. How many groups?\n2. Make two piles: 7 stones and 4 stones. Which has more? By how much?\n3. Hide some beads under a cup: "5 beads, 2 hidden — how many under the cup?"`,
@@ -570,6 +585,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Intermediate',
     skill: 'written',
     level: 'intermediate',
+    duration_min: 30,
     description:
       'Real-purpose writing: students draft letters about their week using a greeting/body/closing template.',
     body: `Write a letter to a friend about your week:\n\n1. Greeting: Dear ____\n2. Body: two things you did, one thing you learned.\n3. Closing: Your friend, ____\n4. Exchange letters with a partner and write back.`,
@@ -586,6 +602,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Beginner',
     skill: 'math',
     level: 'beginner',
+    duration_min: 12,
     description:
       'Students find and name circles, triangles and rectangles in their surroundings, then draw and count them.',
     body: `1. Find 3 things shaped like a circle, 2 like a triangle, 2 like a rectangle.\n2. Draw each one and write its name.\n3. Count the sides of each shape aloud.`,
@@ -602,6 +619,7 @@ export const INITIAL_CONTENT = [
     difficulty: 'Advanced',
     skill: 'reading',
     level: 'advanced',
+    duration_min: 35,
     description:
       'Grade-level passages with inference questions: predict, justify, and summarize in three sentences.',
     body: `Read the passage, then:\n\n1. Retell the story in 3 sentences.\n2. Why do you think the character did that? (Use "because".)\n3. Predict what happens next and give one reason.\n4. Underline two words you learned and use each in a new sentence.`,
@@ -620,6 +638,82 @@ export const INITIAL_ASSIGNMENTS = [
 ];
 
 // ---------------------------------------------------------------------------
+// STUDENT PROFILE APP DATA
+// The student profile is a separate login from the educator profile.
+// CURRENT_STUDENT_ID picks which seeded student the student-app views render.
+// ---------------------------------------------------------------------------
+
+export const CURRENT_STUDENT_ID = 'stu-101'; // Aarav Patil • Grade 3 • Age 9 • Marathi
+
+const daysAgoIso = (n) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().split('T')[0];
+};
+
+// Per-content learning progress for the student profile
+export const INITIAL_STUDENT_PROGRESS = [
+  {
+    _id: 'prg-1',
+    student_id: CURRENT_STUDENT_ID,
+    content_id: 'cnt-002', // Addition & Subtraction Practice Pack (Math, Marathi)
+    status: 'in-progress',
+    progress_pct: 60,
+    last_step: 3,
+    total_steps: 5,
+    last_opened: daysAgoIso(1),
+    completed_at: null,
+  },
+  {
+    _id: 'prg-2',
+    student_id: CURRENT_STUDENT_ID,
+    content_id: 'cnt-010', // Writing Sentences with Pictures (English, Marathi)
+    status: 'completed',
+    progress_pct: 100,
+    last_step: 4,
+    total_steps: 4,
+    last_opened: daysAgoIso(5),
+    completed_at: daysAgoIso(5),
+  },
+  {
+    _id: 'prg-3',
+    student_id: CURRENT_STUDENT_ID,
+    content_id: 'cnt-008', // Phonics Foundations (Reading, Marathi)
+    status: 'completed',
+    progress_pct: 100,
+    last_step: 4,
+    total_steps: 4,
+    last_opened: daysAgoIso(9),
+    completed_at: daysAgoIso(9),
+  },
+];
+
+// Daily learning activity log (drives the streak + minutes stats)
+// Includes today so the demo shows a live streak out of the box.
+export function buildInitialActivity() {
+  return [
+    { date: daysAgoIso(11), minutes: 15 },
+    { date: daysAgoIso(9), minutes: 20 },
+    { date: daysAgoIso(8), minutes: 10 },
+    { date: daysAgoIso(5), minutes: 25 },
+    { date: daysAgoIso(4), minutes: 15 },
+    { date: daysAgoIso(3), minutes: 20 },
+    { date: daysAgoIso(2), minutes: 15 },
+    { date: daysAgoIso(1), minutes: 20 },
+    { date: daysAgoIso(0), minutes: 10 },
+  ];
+}
+
+// Earned badges (earned_at: null means still locked / in progress)
+export const INITIAL_STUDENT_ACHIEVEMENTS = [
+  { _id: 'ach-1', icon: '🎉', title: 'First Steps', description: 'Completed your first learning activity', earned_at: daysAgoIso(11) },
+  { _id: 'ach-2', icon: '📖', title: 'Reading Starter', description: 'Finished a phonics activity', earned_at: daysAgoIso(9) },
+  { _id: 'ach-3', icon: '✍️', title: 'Sentence Builder', description: 'Completed picture-sentence writing', earned_at: daysAgoIso(5) },
+  { _id: 'ach-4', icon: '🔥', title: '5-Day Streak', description: 'Learned 5 days in a row', earned_at: daysAgoIso(1) },
+  { _id: 'ach-5', icon: '🧮', title: 'Addition Master', description: 'Finish the Addition & Subtraction pack', earned_at: null },
+];
+
+// ---------------------------------------------------------------------------
 // LocalStore — localStorage-backed store mirroring backend responses so the
 // demo works with zero backend. All mutations persist and broadcast updates.
 // ---------------------------------------------------------------------------
@@ -631,6 +725,9 @@ const KEYS = {
   tasks: 'CFG_TASKS_V3',
   interventions: 'CFG_INTERVENTIONS_V3',
   assignments: 'CFG_ASSIGNMENTS_V3',
+  studentProgress: 'CFG_STUDENT_PROGRESS_V1',
+  studentActivity: 'CFG_STUDENT_ACTIVITY_V1',
+  studentAchievements: 'CFG_STUDENT_ACHIEVEMENTS_V1',
 };
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -721,6 +818,7 @@ export const LocalStore = {
       level: difficulty.toLowerCase(),
       description: data.description || '',
       body: data.body || '',
+      duration_min: Number(data.duration_min) || 20,
       created_by: 'educator',
       created_at: new Date().toISOString(),
     };
@@ -784,6 +882,76 @@ export const LocalStore = {
     save(KEYS.assignments, list);
     emit();
     return item;
+  },
+
+  // ----- Student profile: progress / activity / achievements -----
+  getStudentProgress() {
+    return load(KEYS.studentProgress, INITIAL_STUDENT_PROGRESS);
+  },
+
+  upsertStudentProgress({ student_id, content_id, progress_pct, last_step, total_steps, status }) {
+    const list = this.getStudentProgress();
+    const today = new Date().toISOString().split('T')[0];
+    // Default to the logged-in student profile when not specified
+    const sid = student_id || CURRENT_STUDENT_ID;
+    let rec = list.find(
+      (p) => String(p.student_id) === String(sid) && String(p.content_id) === String(content_id)
+    );
+    if (!rec) {
+      rec = {
+        _id: 'prg-' + Date.now(),
+        student_id: String(sid),
+        content_id: String(content_id),
+        status: 'in-progress',
+        progress_pct: 0,
+        last_step: 0,
+        total_steps: total_steps || 1,
+        last_opened: today,
+        completed_at: null,
+      };
+      list.push(rec);
+    }
+    if (progress_pct != null) rec.progress_pct = Math.max(0, Math.min(100, Math.round(progress_pct)));
+    if (last_step != null) rec.last_step = last_step;
+    if (total_steps != null) rec.total_steps = total_steps;
+    if (status) rec.status = status;
+    rec.last_opened = today;
+    if (rec.status === 'completed' && !rec.completed_at) rec.completed_at = today;
+    save(KEYS.studentProgress, list);
+    emit();
+    return rec;
+  },
+
+  getStudentActivity() {
+    return load(KEYS.studentActivity, buildInitialActivity());
+  },
+
+  logStudentActivity(minutes) {
+    const log = this.getStudentActivity();
+    const today = new Date().toISOString().split('T')[0];
+    const entry = log.find((a) => a.date === today);
+    if (entry) {
+      entry.minutes += Number(minutes) || 0;
+    } else {
+      log.push({ date: today, minutes: Number(minutes) || 0 });
+    }
+    save(KEYS.studentActivity, log);
+    emit();
+    return log;
+  },
+
+  getStudentAchievements() {
+    return load(KEYS.studentAchievements, INITIAL_STUDENT_ACHIEVEMENTS);
+  },
+
+  awardStudentAchievement(title) {
+    const list = this.getStudentAchievements();
+    const existing = list.find((a) => a.title === title);
+    if (!existing || existing.earned_at) return null;
+    existing.earned_at = new Date().toISOString().split('T')[0];
+    save(KEYS.studentAchievements, list);
+    emit();
+    return existing;
   },
 
   // ----- Reset -----

@@ -201,6 +201,7 @@ export default function ContentScreen() {
                 <span className="meta-tag">{LANG_LABELS[c.language] || c.language}</span>
                 <span className="meta-tag">Age {c.age_min}–{c.age_max}</span>
                 <span className="meta-tag">Grade {(c.grades || []).join('–')}</span>
+                <span className="meta-tag">⏱ {c.duration_min || 20} min</span>
               </div>
               <div className="content-skill-row">
                 <span className="skill-chip">Skill: {SKILL_LABELS[c.skill] || c.skill}</span>
