@@ -17,6 +17,10 @@ const studentSchema = new mongoose.Schema(
   }
 );
 
+studentSchema.index({ cluster: 1 });
+studentSchema.index({ district: 1 });
+studentSchema.index({ grade: 1 });
+
 // Virtual alias for backwards compatibility
 studentSchema.virtual('language').get(function () {
   return this.language_pref;

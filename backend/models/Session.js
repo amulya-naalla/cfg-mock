@@ -11,4 +11,8 @@ const sessionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+sessionSchema.index({ educator_id: 1 });
+sessionSchema.index({ cluster: 1 });
+sessionSchema.index({ date: -1 });
+
 module.exports = mongoose.model('Session', sessionSchema);

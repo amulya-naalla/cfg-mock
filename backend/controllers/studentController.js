@@ -3,9 +3,29 @@ const Assessment = require('../models/Assessment');
 
 async function getStudents(req, res) {
   try {
-    const { cluster } = req.query;
-    const filter = cluster ? { cluster } : {};
-    const students = await Student.find(filter);
+    const { search, district, cluster, grade, language, language_pref, flagged } = req.query;
+    const filter = {};
+
+    if (cluster) filter.cluster = cluster;
+    if (district) filter.district = district;
+    if (grade) filter.grade = Number(grade);
+
+    const lang = language_pref || language;
+    if (lang) filter.language_pref = lang;
+
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { guardian_name: { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    if (flagged === 'true' || flagged === true) {
+      const flaggedAssessments = await Assessment.distinct('student_id', { flagged: true });
+      filter._id = { $in: flaggedAssessments };
+    }
+
+    const students = await Student.find(filter).sort({ name: 1 });
     res.json(students);
   } catch (err) {
     res.status(500).json({ error: err.message });

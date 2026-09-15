@@ -5,6 +5,9 @@ const Student = require('../models/Student');
 const Assessment = require('../models/Assessment');
 const Content = require('../models/Content');
 const Session = require('../models/Session');
+const SessionAttendance = require('../models/SessionAttendance');
+const Intervention = require('../models/Intervention');
+const StudentNote = require('../models/StudentNote');
 const { FLAG_THRESHOLD_DIFF } = require('../controllers/assessmentController');
 
 async function seed() {
@@ -15,6 +18,9 @@ async function seed() {
   await Assessment.deleteMany({});
   await Content.deleteMany({});
   await Session.deleteMany({});
+  await SessionAttendance.deleteMany({});
+  await Intervention.deleteMany({});
+  await StudentNote.deleteMany({});
 
   console.log('Seeding 12 Tamil Nadu students...');
   const students = await Student.insertMany([
@@ -28,7 +34,7 @@ async function seed() {
       guardian_contact: '+91 98765 43210',
     },
     {
-      name: 'Arun Kumar',
+      name: 'Arun Kumar', // Persona 3: Poor attendance student
       grade: 4,
       district: 'Chennai',
       cluster: 'Chennai-North',
@@ -37,7 +43,7 @@ async function seed() {
       guardian_contact: '+91 98765 43211',
     },
     {
-      name: 'Deepa Sundaram',
+      name: 'Deepa Sundaram', // Persona 1: Improving student
       grade: 6,
       district: 'Chennai',
       cluster: 'Chennai-South',
@@ -46,7 +52,7 @@ async function seed() {
       guardian_contact: '+91 98765 43212',
     },
     {
-      name: 'Vijay Chandran',
+      name: 'Vijay Chandran', // Persona 2: Persistent learning gap
       grade: 3,
       district: 'Madurai',
       cluster: 'Madurai-East',
@@ -64,7 +70,7 @@ async function seed() {
       guardian_contact: '+91 98765 43214',
     },
     {
-      name: 'Manoj Pandian',
+      name: 'Manoj Pandian', // Persona 4: Received intervention & improved
       grade: 7,
       district: 'Madurai',
       cluster: 'Madurai-West',
@@ -147,35 +153,38 @@ async function seed() {
     };
   };
 
-  console.log('Seeding 20 realistic assessments...');
+  console.log('Seeding realistic assessments...');
   const assessments = await Assessment.insertMany([
     // Student 0: Kavya (Grade 5)
     createAssessPayload(0, 'Math', 78, 60, 'Chennai-North', 10),
     createAssessPayload(0, 'Reading', 42, 60, 'Chennai-North', 2), // Flagged (42 < 45)
 
-    // Student 1: Arun (Grade 4)
-    createAssessPayload(1, 'Math', 35, 55, 'Chennai-North', 5), // Flagged (35 < 40)
-    createAssessPayload(1, 'Tamil', 68, 55, 'Chennai-North', 1),
+    // Student 1: Arun (Grade 4 - Poor attendance)
+    createAssessPayload(1, 'Math', 35, 55, 'Chennai-North', 15), // Flagged
+    createAssessPayload(1, 'Tamil', 48, 55, 'Chennai-North', 2),
 
-    // Student 2: Deepa (Grade 6)
-    createAssessPayload(2, 'English', 85, 70, 'Chennai-South', 8),
+    // Student 2: Deepa (Grade 6 - Persona 1: Improving student 45 -> 68 -> 85)
+    createAssessPayload(2, 'English', 45, 70, 'Chennai-South', 30),
+    createAssessPayload(2, 'English', 68, 70, 'Chennai-South', 15),
+    createAssessPayload(2, 'English', 85, 70, 'Chennai-South', 2),
     createAssessPayload(2, 'Science', 72, 70, 'Chennai-South', 3),
 
-    // Student 3: Vijay (Grade 3)
-    createAssessPayload(3, 'Math', 25, 50, 'Madurai-East', 12), // Flagged (25 < 35)
-    createAssessPayload(3, 'Reading', 30, 50, 'Madurai-East', 4), // Flagged (30 < 35)
+    // Student 3: Vijay (Grade 3 - Persona 2: Persistent learning gap)
+    createAssessPayload(3, 'Math', 25, 50, 'Madurai-East', 20), // Flagged
+    createAssessPayload(3, 'Math', 28, 50, 'Madurai-East', 10), // Flagged
+    createAssessPayload(3, 'Reading', 30, 50, 'Madurai-East', 2), // Flagged
 
     // Student 4: Ananya (Grade 5)
     createAssessPayload(4, 'Tamil', 80, 65, 'Madurai-East', 7),
     createAssessPayload(4, 'Math', 62, 65, 'Madurai-East', 2),
 
-    // Student 5: Manoj (Grade 7)
-    createAssessPayload(5, 'Science', 40, 75, 'Madurai-West', 14), // Flagged (40 < 60)
-    createAssessPayload(5, 'Math', 70, 75, 'Madurai-West', 6),
+    // Student 5: Manoj (Grade 7 - Persona 4: Intervention & Improved 40 -> 75)
+    createAssessPayload(5, 'Science', 40, 75, 'Madurai-West', 25), // Flagged initial
+    createAssessPayload(5, 'Science', 75, 75, 'Madurai-West', 3), // Improved after intervention
 
     // Student 6: Nithya (Grade 4)
     createAssessPayload(6, 'Math', 65, 55, 'Coimbatore-Central', 9),
-    createAssessPayload(6, 'English', 38, 55, 'Coimbatore-Central', 3), // Flagged (38 < 40)
+    createAssessPayload(6, 'English', 38, 55, 'Coimbatore-Central', 3), // Flagged
 
     // Student 7: Suresh (Grade 6)
     createAssessPayload(7, 'Science', 88, 70, 'Coimbatore-Central', 11),
@@ -183,7 +192,7 @@ async function seed() {
 
     // Student 8: Meenakshi (Grade 8)
     createAssessPayload(8, 'Tamil', 92, 80, 'Coimbatore-South', 15),
-    createAssessPayload(8, 'Math', 58, 80, 'Coimbatore-South', 5), // Flagged (58 < 65)
+    createAssessPayload(8, 'Math', 58, 80, 'Coimbatore-South', 5), // Flagged
 
     // Student 9: Karthik (Grade 3)
     createAssessPayload(9, 'Reading', 60, 50, 'Chennai-South', 6),
@@ -192,7 +201,7 @@ async function seed() {
     createAssessPayload(10, 'English', 74, 65, 'Madurai-West', 4),
 
     // Student 11: Saravanan (Grade 7)
-    createAssessPayload(11, 'Science', 45, 75, 'Coimbatore-South', 3), // Flagged (45 < 60)
+    createAssessPayload(11, 'Science', 45, 75, 'Coimbatore-South', 3), // Flagged
   ]);
 
   console.log(`Seeded ${assessments.length} assessments.`);
@@ -203,50 +212,138 @@ async function seed() {
       educator_id: 'ED-101',
       cluster: 'Chennai-North',
       topic: 'Math Basics & Fractions',
-      attendance_count: 14,
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
+      attendance_count: 2,
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14),
     },
     {
       educator_id: 'ED-101',
       cluster: 'Chennai-North',
       topic: 'Reading Circle & Tamil Storytelling',
-      attendance_count: 16,
+      attendance_count: 1,
       date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
     },
     {
       educator_id: 'ED-102',
       cluster: 'Madurai-East',
       topic: 'Foundational Numeracy & Multiplication Worksheets',
-      attendance_count: 12,
-      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+      attendance_count: 2,
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 10),
     },
     {
       educator_id: 'ED-102',
       cluster: 'Madurai-West',
       topic: 'Science Experiments & Life Skills',
-      attendance_count: 15,
+      attendance_count: 2,
       date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1),
     },
     {
       educator_id: 'ED-103',
       cluster: 'Coimbatore-Central',
       topic: 'English Phonics & Listening Skills',
-      attendance_count: 18,
+      attendance_count: 2,
       date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 6),
     },
     {
       educator_id: 'ED-103',
       cluster: 'Coimbatore-South',
       topic: 'Hygiene, Health & Environmental Science',
-      attendance_count: 11,
+      attendance_count: 2,
       date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
     },
   ]);
 
   console.log(`Seeded ${sessions.length} sessions.`);
 
+  console.log('Seeding individual session attendance records...');
+  const attendanceRecords = await SessionAttendance.insertMany([
+    // Session 0 (Chennai-North)
+    { session_id: sessions[0]._id, student_id: students[0]._id, status: 'present' }, // Kavya
+    { session_id: sessions[0]._id, student_id: students[1]._id, status: 'absent' },  // Arun (Absent - Persona 3)
+
+    // Session 1 (Chennai-North)
+    { session_id: sessions[1]._id, student_id: students[0]._id, status: 'present' }, // Kavya
+    { session_id: sessions[1]._id, student_id: students[1]._id, status: 'absent' },  // Arun (Absent - Persona 3)
+
+    // Session 2 (Madurai-East)
+    { session_id: sessions[2]._id, student_id: students[3]._id, status: 'present' }, // Vijay
+    { session_id: sessions[2]._id, student_id: students[4]._id, status: 'present' }, // Ananya
+
+    // Session 3 (Madurai-West)
+    { session_id: sessions[3]._id, student_id: students[5]._id, status: 'present' }, // Manoj
+    { session_id: sessions[3]._id, student_id: students[10]._id, status: 'present' },// Divya
+
+    // Session 4 (Coimbatore-Central)
+    { session_id: sessions[4]._id, student_id: students[6]._id, status: 'present' }, // Nithya
+    { session_id: sessions[4]._id, student_id: students[7]._id, status: 'present' }, // Suresh
+
+    // Session 5 (Coimbatore-South)
+    { session_id: sessions[5]._id, student_id: students[8]._id, status: 'present' }, // Meenakshi
+    { session_id: sessions[5]._id, student_id: students[11]._id, status: 'present' },// Saravanan
+  ]);
+
+  console.log(`Seeded ${attendanceRecords.length} attendance records.`);
+
+  console.log('Seeding interventions...');
+  const interventions = await Intervention.insertMany([
+    {
+      student_id: students[3]._id, // Vijay (Persona 2: Persistent gap)
+      educator_id: 'ED-102',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 12),
+      subject: 'Math',
+      issue: 'Struggles with single-digit addition and place value recognition',
+      action: 'Provide visual block counters and 1-on-1 15-min remedial after session',
+      status: 'active',
+      notes: 'Needs repeated practice on place values.',
+    },
+    {
+      student_id: students[5]._id, // Manoj (Persona 4: Intervention & Improved)
+      educator_id: 'ED-102',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 20),
+      subject: 'Science',
+      issue: 'Scored 40 on Science baseline assessment',
+      action: 'Conduct hands-on experiment demonstration on force and motion',
+      status: 'completed',
+      notes: 'Student responded exceptionally well to visual demonstrations. Score improved to 75!',
+    },
+    {
+      student_id: students[1]._id, // Arun (Persona 3: Poor attendance)
+      educator_id: 'ED-101',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5),
+      subject: 'Attendance',
+      issue: 'Missed consecutive weekend learning sessions',
+      action: 'Schedule home visit with guardian Lakshmi Kumar',
+      status: 'planned',
+      notes: 'Guardian works morning shift; coordinate evening check-in.',
+    },
+  ]);
+
+  console.log(`Seeded ${interventions.length} interventions.`);
+
+  console.log('Seeding student notes...');
+  const studentNotes = await StudentNote.insertMany([
+    {
+      student_id: students[3]._id, // Vijay
+      educator_id: 'ED-102',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 11),
+      note: 'Vijay is enthusiastic in group activities but hesitates during written math worksheets.',
+    },
+    {
+      student_id: students[5]._id, // Manoj
+      educator_id: 'ED-102',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 18),
+      note: 'Manoj shows high curiosity in practical science applications.',
+    },
+    {
+      student_id: students[2]._id, // Deepa
+      educator_id: 'ED-101',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 8),
+      note: 'Deepa has shown rapid progress in English comprehension after borrowing storybooks.',
+    },
+  ]);
+
+  console.log(`Seeded ${studentNotes.length} student notes.`);
+
   console.log('Seeding 2 content lessons...');
-  // 2 seed lessons — original_text only, localized_text gets filled by hitting the translate route.
   const content = await Content.insertMany([
     {
       title: 'Introduction to Fractions',
