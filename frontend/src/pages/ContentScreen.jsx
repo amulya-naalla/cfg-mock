@@ -13,7 +13,7 @@ export default function ContentScreen() {
 
   async function handleTranslate() {
     const res = await client.post(`/api/content/${contentId}/translate`, { lang });
-    setContent((prev) => ({ ...prev, original_text: res.data.body }));
+    setContent(res.data);
   }
 
   return (
