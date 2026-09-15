@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import client from '../api/client.js';
 import ClusterBarChart, { clusterStatus } from '../components/ClusterBarChart.jsx';
 import {
@@ -42,7 +42,10 @@ function MetricCard({ label, value, tone = '', icon }) {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState('educator'); // 'educator' | 'leadership'
+  const location = useLocation();
+  const isLeadership = location.pathname.startsWith('/leadership');
+  const viewMode = isLeadership ? 'leadership' : 'educator';
+
   const [data, setData] = useState(() => deriveDashboard());
   const [modal, setModal] = useState(null);
 
@@ -76,28 +79,6 @@ export default function Dashboard() {
 
   return (
     <div className="page-dashboard">
-      {/* View mode selector */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <div style={{ display: 'flex', gap: '8px', background: '#e2e8f0', padding: '4px', borderRadius: '10px' }}>
-          <button
-            type="button"
-            className={`btn-secondary ${viewMode === 'educator' ? 'btn-primary' : ''}`}
-            onClick={() => setViewMode('educator')}
-            style={{ padding: '6px 16px', borderRadius: '8px', border: 'none' }}
-          >
-            🧑‍🏫 Educator Overview
-          </button>
-          <button
-            type="button"
-            className={`btn-secondary ${viewMode === 'leadership' ? 'btn-primary' : ''}`}
-            onClick={() => setViewMode('leadership')}
-            style={{ padding: '6px 16px', borderRadius: '8px', border: 'none' }}
-          >
-            📊 Leadership Analytics
-          </button>
-        </div>
-      </div>
-
       {viewMode === 'educator' ? (
         <>
           {/* Header + quick actions */}

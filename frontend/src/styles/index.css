@@ -6563,6 +6563,498 @@ button {
   border-radius: 8px;
 }
 
+/* ==========================================================================
+   LANDING PAGE STYLES (.lm-*)
+   ========================================================================== */
+
+.lm-page {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--color-text-main);
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.lm-serif {
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* 1. Navbar */
+.lm-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.lm-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-decoration: none;
+}
+
+.lm-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.lm-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.lm-nav-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.lm-nav-link:hover {
+  color: #4f46e5;
+}
+
+.lm-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lm-nav-dropdown {
+  position: relative;
+}
+
+.lm-btn-solid {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4f46e5, #3730a3);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+  transition: all 0.15s ease;
+}
+
+.lm-btn-solid:hover {
+  background: linear-gradient(135deg, #4338ca, #312e81);
+  transform: translateY(-1px);
+}
+
+.lm-nav-dropdown:hover .lm-dropdown-content {
+  display: block;
+}
+
+.lm-dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 6px;
+  width: 220px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.lm-dropdown-content a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.lm-dropdown-content a:hover {
+  background: #f1f5f9;
+  color: #4f46e5;
+}
+
+/* 2. Hero Section */
+.lm-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lm-hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.lm-hero-badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4f46e5;
+  background: #e0e7ff;
+  border: 1px solid #c7d2fe;
+  padding: 6px 14px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lm-hero-text h1 {
+  font-size: 2.75rem;
+  line-height: 1.2;
+  color: #0f172a;
+}
+
+.lm-hero-text p {
+  font-size: 1.1rem;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.lm-hero-img-wrap {
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+.lm-hero-img-wrap img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+/* 3. Core Mission Programs & Sections */
+.lm-section {
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.lm-section-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.lm-section-header h2 {
+  font-size: 2.25rem;
+  color: #0f172a;
+}
+
+.lm-section-header p {
+  font-size: 1rem;
+  color: #64748b;
+}
+
+.lm-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.lm-mission-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.lm-mission-card:hover {
+  border-color: #c7d2fe;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.08);
+}
+
+.lm-mission-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lm-mission-icon.teal { background: #e0f2fe; color: #0284c7; }
+.lm-mission-icon.rust { background: #ffedd5; color: #ea580c; }
+.lm-mission-icon.pink { background: #fce7f3; color: #db2777; }
+
+.lm-mission-card h3 {
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.lm-mission-card p {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* 4. Stats Banner */
+.lm-stats-banner {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #312e81 100%);
+  color: #ffffff;
+  padding: 48px 40px;
+}
+
+.lm-stats-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+
+.lm-stat h3 {
+  font-size: 2.75rem;
+  color: #f59e0b;
+  margin-bottom: 4px;
+}
+
+.lm-stat p {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+/* 5. Workflow */
+.lm-workflow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.lm-step {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lm-step-num {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #4f46e5;
+}
+
+.lm-step-content h4 {
+  font-size: 1.1rem;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.lm-step-content p {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* 6. Testimonial */
+.lm-testimonial {
+  background: #f1f5f9;
+  padding: 60px 40px;
+}
+
+.lm-testimonial-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 40px;
+  align-items: center;
+}
+
+.lm-quote {
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: #1e1b4b;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.lm-author strong {
+  display: block;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+.lm-author span {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.lm-testimonial-img {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
+.lm-testimonial-img img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+/* 7. District Cards */
+.lm-district-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lm-district-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lm-district-header h3 {
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.lm-district-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+/* 8. Footer */
+.lm-footer {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 60px 40px 24px;
+}
+
+.lm-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.lm-footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 400px;
+}
+
+.lm-footer-brand p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.lm-footer-links {
+  display: flex;
+  gap: 60px;
+}
+
+.lm-link-col h4 {
+  font-size: 0.95rem;
+  color: #f8fafc;
+  margin-bottom: 12px;
+}
+
+.lm-link-col a {
+  display: block;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-decoration: none;
+  margin-bottom: 8px;
+  transition: color 0.15s ease;
+}
+
+.lm-link-col a:hover {
+  color: #f59e0b;
+}
+
+.lm-footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid #334155;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.lm-footer-bottom a {
+  color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .lm-hero {
+    grid-template-columns: 1fr;
+    padding: 30px 20px;
+  }
+  .lm-grid-3,
+  .lm-stats-inner,
+  .lm-workflow,
+  .lm-testimonial-inner,
+  .lm-footer-inner {
+    grid-template-columns: 1fr;
+  }
+  .lm-navbar {
+    padding: 14px 18px;
+  }
+}
+
+
 
 
 
