@@ -6,14 +6,14 @@ async function generateParentSummary(req, res) {
   const student = await Student.findById(req.params.id);
   if (!student) return res.status(404).json({ error: 'Student not found' });
 
-  const [latest] = await Assessment.find({ student_id: student._id }).sort({ createdAt: -1 }).limit(1);
+  const [latest] = await Assessment.find({ student_id: student._id }).sort({ date: -1 }).limit(1);
 
   let summary_en;
   if (!latest) {
-    summary_en = `${student.name} (Grade ${student.grade_level}) hasn't completed any assessments yet.`;
+    summary_en = `${student.name} (Grade ${student.grade}) hasn't completed any assessments yet.`;
   } else {
     const note = latest.flagged ? "let's keep practicing." : 'great improvement!';
-    summary_en = `${student.name} (Grade ${student.grade_level}) scored ${latest.score}/100 in ${latest.subject} this week — ${note}`;
+    summary_en = `${student.name} (Grade ${student.grade}) scored ${latest.score}/100 in ${latest.subject} this week — ${note}`;
   }
 
   const language = student.language_pref || 'en';
