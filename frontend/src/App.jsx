@@ -7,6 +7,7 @@ import ContentScreen from './pages/ContentScreen.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import StudentDashboard from './pages/StudentDashboard.jsx';
 import StudentLearn from './pages/StudentLearn.jsx';
+import StudentTests from './pages/StudentTests.jsx';
 import ApiConfigModal from './components/ApiConfigModal.jsx';
 import { EDUCATOR_PROFILE, CONFIG } from './config.js';
 import { getCurrentStudent, langLabel } from './utils/student.js';
@@ -119,6 +120,7 @@ export default function App() {
           <>
             <NavLink to="/student" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Home</NavLink>
             <NavLink to="/student/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Learn</NavLink>
+            <NavLink to="/student/tests" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Tests</NavLink>
           </>
         )}
       </nav>
@@ -143,6 +145,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/student" replace />} />
             <Route path="/student" element={<StudentDashboard />} />
             <Route path="/student/learn" element={<StudentLearn />} />
+            <Route path="/student/tests" element={<StudentTests />} />
             {/* Educator routes are not part of the student profile */}
             <Route path="*" element={<Navigate to="/student" replace />} />
           </Routes>

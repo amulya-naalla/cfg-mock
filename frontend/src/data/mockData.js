@@ -711,7 +711,341 @@ export const INITIAL_STUDENT_ACHIEVEMENTS = [
   { _id: 'ach-3', icon: '✍️', title: 'Sentence Builder', description: 'Completed picture-sentence writing', earned_at: daysAgoIso(5) },
   { _id: 'ach-4', icon: '🔥', title: '5-Day Streak', description: 'Learned 5 days in a row', earned_at: daysAgoIso(1) },
   { _id: 'ach-5', icon: '🧮', title: 'Addition Master', description: 'Finish the Addition & Subtraction pack', earned_at: null },
+  { _id: 'ach-6', icon: '🧪', title: 'Test Champion', description: 'Complete your first practice test', earned_at: null },
 ];
+
+// ---------------------------------------------------------------------------
+// Student Tests: MCQ test catalog + attempts
+// A test targets ONE skill area (mirrors content.skill) and ONE difficulty,
+// so the adaptive recommender can score tests the same way as content.
+// ---------------------------------------------------------------------------
+
+export const INITIAL_TESTS = [
+  {
+    _id: 'tst-001',
+    title: 'Reading Comprehension Check',
+    subject: 'Reading',
+    skill: 'reading',
+    language: 'mr',
+    difficulty: 'Beginner',
+    grade: '3',
+    time_limit_min: 10,
+    questions: [
+      {
+        topic: 'Main Idea',
+        prompt: 'Meena reads a storybook every night after dinner. What is this paragraph mainly about?',
+        options: ['Meena’s daily reading habit', 'Meena’s dinner', 'Storybooks are costly', 'Meena’s school'],
+        answer: 0,
+      },
+      {
+        topic: 'Vocabulary',
+        prompt: 'Which word means the OPPOSITE of "finish"?',
+        options: ['start', 'end', 'complete', 'stop'],
+        answer: 0,
+      },
+      {
+        topic: 'Details',
+        prompt: 'Ravi shares his pencils with friends at break time. What is the paragraph about?',
+        options: ['Sharing pencils', 'Buying pencils', 'A pencil factory', 'Broken pencils'],
+        answer: 0,
+      },
+      {
+        topic: 'Sequencing',
+        prompt: 'Which of these happens FIRST in a school day?',
+        options: ['Morning assembly', 'Lunch break', 'Evening homework', 'Going to sleep'],
+        answer: 0,
+      },
+      {
+        topic: 'Inference',
+        prompt: 'Sita packed her umbrella before leaving home. What can you guess about the weather?',
+        options: ['It might rain', 'It is snowing', 'It is very hot', 'It is windy only'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-002',
+    title: 'Addition & Subtraction Sprint',
+    subject: 'Math',
+    skill: 'math',
+    language: 'mr',
+    difficulty: 'Beginner',
+    grade: '3',
+    time_limit_min: 12,
+    questions: [
+      {
+        topic: 'Addition',
+        prompt: 'What is 25 + 14?',
+        options: ['39', '29', '41', '38'],
+        answer: 0,
+      },
+      {
+        topic: 'Subtraction',
+        prompt: 'What is 30 − 8?',
+        options: ['22', '24', '28', '32'],
+        answer: 0,
+      },
+      {
+        topic: 'Word Problem',
+        prompt: 'A shopkeeper had 34 mangoes and sold 16. How many are left?',
+        options: ['18', '20', '16', '50'],
+        answer: 0,
+      },
+      {
+        topic: 'Number Bonds',
+        prompt: 'What number makes this true: 12 + __ = 20?',
+        options: ['8', '7', '9', '6'],
+        answer: 0,
+      },
+      {
+        topic: 'Place Value',
+        prompt: 'In the number 47, what does the digit 4 mean?',
+        options: ['4 tens', '4 ones', '4 hundreds', '4 itself'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-003',
+    title: 'Shapes & Patterns Quiz',
+    subject: 'Math',
+    skill: 'cognitive',
+    language: 'en',
+    difficulty: 'Intermediate',
+    grade: '4',
+    time_limit_min: 10,
+    questions: [
+      {
+        topic: 'Patterns',
+        prompt: 'What comes next: 2, 4, 8, 16, __?',
+        options: ['32', '24', '20', '18'],
+        answer: 0,
+      },
+      {
+        topic: 'Shapes',
+        prompt: 'How many sides does a triangle have?',
+        options: ['3', '4', '5', '6'],
+        answer: 0,
+      },
+      {
+        topic: 'Patterns',
+        prompt: 'What comes next: 1, 4, 9, 16, __?',
+        options: ['25', '20', '24', '36'],
+        answer: 0,
+      },
+      {
+        topic: 'Odd One Out',
+        prompt: 'Which one is NOT a 2D shape?',
+        options: ['Cube', 'Circle', 'Square', 'Triangle'],
+        answer: 0,
+      },
+      {
+        topic: 'Logic',
+        prompt: 'All roses in a garden are red. You pick a flower from this garden. It is most likely…',
+        options: ['red', 'blue', 'yellow', 'green'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-004',
+    title: 'Sentence Writing Check',
+    subject: 'English',
+    skill: 'written',
+    language: 'en',
+    difficulty: 'Intermediate',
+    grade: '4',
+    time_limit_min: 8,
+    questions: [
+      {
+        topic: 'Sentence Structure',
+        prompt: 'Which group of words is a COMPLETE sentence?',
+        options: ['The dog barked loudly.', 'Running very fast.', 'In the big garden.', 'A plate of mangoes.'],
+        answer: 0,
+      },
+      {
+        topic: 'Punctuation',
+        prompt: 'Which sentence uses the full stop correctly?',
+        options: ['I like mangoes.', 'I like mangoes', 'I, like mangoes', 'I like, mangoes'],
+        answer: 0,
+      },
+      {
+        topic: 'Word Choice',
+        prompt: 'Choose the best word: The sun is very ____ today.',
+        options: ['bright', 'loudly', 'quickly', 'softly'],
+        answer: 0,
+      },
+      {
+        topic: 'Ordering',
+        prompt: 'Which words make a correct sentence? “is / my name / Aarav”',
+        options: ['My name is Aarav', 'Name my is Aarav', 'Aarav is my name my', 'Is my Aarav name'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-005',
+    title: 'Vocabulary & Fluency Test',
+    subject: 'English',
+    skill: 'verbal',
+    language: 'en',
+    difficulty: 'Intermediate',
+    grade: '5',
+    time_limit_min: 10,
+    questions: [
+      {
+        topic: 'Synonyms',
+        prompt: 'Which word means almost the SAME as “happy”?',
+        options: ['cheerful', 'angry', 'tired', 'sleepy'],
+        answer: 0,
+      },
+      {
+        topic: 'Antonyms',
+        prompt: 'Which word is the OPPOSITE of “loud”?',
+        options: ['quiet', 'noisy', 'strong', 'heavy'],
+        answer: 0,
+      },
+      {
+        topic: 'Context Clues',
+        prompt: 'Fill in: “Please ____ the door quietly.”',
+        options: ['close', 'eat', 'jump', 'sing'],
+        answer: 0,
+      },
+      {
+        topic: 'Categories',
+        prompt: 'Which word does NOT belong: mango, banana, potato, apple?',
+        options: ['potato', 'mango', 'banana', 'apple'],
+        answer: 0,
+      },
+      {
+        topic: 'Usage',
+        prompt: 'Which is the correct way to ask a question?',
+        options: ['Where is my bag?', 'Where my bag is?', 'My bag where is?', 'Is my bag where?'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-006',
+    title: 'Advanced Reading Challenge',
+    subject: 'Reading',
+    skill: 'reading',
+    language: 'en',
+    difficulty: 'Advanced',
+    grade: '6',
+    time_limit_min: 15,
+    questions: [
+      {
+        topic: 'Inference',
+        prompt: '“Although the team practiced hard, they lost the final match.” What does “although” tell us?',
+        options: ['An unexpected result', 'A reason', 'A time', 'A place'],
+        answer: 0,
+      },
+      {
+        topic: 'Main Idea',
+        prompt: 'A paragraph lists causes of floods and ends with ways to prevent them. Its main idea is about…',
+        options: ['Floods and their prevention', 'Rivers only', 'Rainfall only', 'Building houses'],
+        answer: 0,
+      },
+      {
+        topic: 'Prediction',
+        prompt: 'A story ends with a character packing a suitcase at night. What will probably happen next?',
+        options: ['They will travel', 'They will sleep', 'They will eat', 'They will study'],
+        answer: 0,
+      },
+      {
+        topic: 'Summary',
+        prompt: 'Which is the BEST three-sentence summary strategy?',
+        options: ['Main event, key cause, outcome', 'Copy three lines', 'List every name', 'Count the words'],
+        answer: 0,
+      },
+      {
+        topic: 'Vocabulary',
+        prompt: 'In “a gloomy sky”, “gloomy” suggests the sky is…',
+        options: ['dark and dull', 'bright and clear', 'full of stars', 'very hot'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-007',
+    title: 'Multiplication Tables Challenge',
+    subject: 'Math',
+    skill: 'math',
+    language: 'en',
+    difficulty: 'Intermediate',
+    grade: '4',
+    time_limit_min: 12,
+    questions: [
+      {
+        topic: 'Multiplication',
+        prompt: 'What is 6 × 7?',
+        options: ['42', '36', '48', '40'],
+        answer: 0,
+      },
+      {
+        topic: 'Multiplication',
+        prompt: 'What is 8 × 9?',
+        options: ['72', '64', '81', '56'],
+        answer: 0,
+      },
+      {
+        topic: 'Skip Counting',
+        prompt: 'Continue: 5, 10, 15, 20, __',
+        options: ['25', '22', '30', '24'],
+        answer: 0,
+      },
+      {
+        topic: 'Word Problem',
+        prompt: 'One pen costs ₹6. What do 5 pens cost?',
+        options: ['₹30', '₹35', '₹11', '₹24'],
+        answer: 0,
+      },
+      {
+        topic: 'Division',
+        prompt: 'Which division matches 6 × 7 = 42?',
+        options: ['42 ÷ 7 = 6', '42 ÷ 6 = 8', '42 ÷ 7 = 7', '40 ÷ 5 = 8'],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    _id: 'tst-008',
+    title: 'Number Sense Warm-up',
+    subject: 'Math',
+    skill: 'math',
+    language: 'ta',
+    difficulty: 'Beginner',
+    grade: '1',
+    time_limit_min: 8,
+    questions: [
+      {
+        topic: 'Counting',
+        prompt: 'Count the beads: ●●●●●●●  What number is this?',
+        options: ['7', '6', '8', '5'],
+        answer: 0,
+      },
+      {
+        topic: 'Comparing',
+        prompt: 'Which number is BIGGER?',
+        options: ['9', '6', '3', '1'],
+        answer: 0,
+      },
+      {
+        topic: 'Grouping',
+        prompt: '10 beads are put in groups of 2. How many groups?',
+        options: ['5', '2', '10', '4'],
+        answer: 0,
+      },
+      {
+        topic: 'Missing Number',
+        prompt: 'What comes next: 6, 7, 8, __?',
+        options: ['9', '10', '7', '5'],
+        answer: 0,
+      },
+    ],
+  },
+]
 
 // ---------------------------------------------------------------------------
 // LocalStore — localStorage-backed store mirroring backend responses so the
@@ -728,6 +1062,8 @@ const KEYS = {
   studentProgress: 'CFG_STUDENT_PROGRESS_V1',
   studentActivity: 'CFG_STUDENT_ACTIVITY_V1',
   studentAchievements: 'CFG_STUDENT_ACHIEVEMENTS_V1',
+  tests: 'CFG_TESTS_V1',
+  testAttempts: 'CFG_TEST_ATTEMPTS_V1',
 };
 
 const clone = (x) => JSON.parse(JSON.stringify(x));
@@ -941,7 +1277,12 @@ export const LocalStore = {
   },
 
   getStudentAchievements() {
-    return load(KEYS.studentAchievements, INITIAL_STUDENT_ACHIEVEMENTS);
+    const saved = load(KEYS.studentAchievements, INITIAL_STUDENT_ACHIEVEMENTS);
+    // Merge in newer seed achievements that older saved state may not have
+    const missing = INITIAL_STUDENT_ACHIEVEMENTS.filter(
+      (seed) => !saved.some((a) => a._id === seed._id || a.title === seed.title)
+    );
+    return missing.length ? [...saved, ...missing] : saved;
   },
 
   awardStudentAchievement(title) {
@@ -952,6 +1293,45 @@ export const LocalStore = {
     save(KEYS.studentAchievements, list);
     emit();
     return existing;
+  },
+
+  // ----- Student tests: catalog + attempts -----
+  getTests() {
+    return load(KEYS.tests, INITIAL_TESTS);
+  },
+
+  getTestAttempts() {
+    return load(KEYS.testAttempts, []);
+  },
+
+  /**
+   * Save a completed test attempt. Also: logs activity minutes (streak
+   * driver) and awards the Test Champion achievement on the first test.
+   */
+  addTestAttempt({ test_id, student_id, answers, score, total, pct, time_taken_sec }) {
+    const attempts = this.getTestAttempts();
+    const attempt = {
+      _id: 'att-' + Date.now(),
+      test_id: String(test_id),
+      student_id: String(student_id || CURRENT_STUDENT_ID),
+      answers: answers || [],
+      score: Number(score) || 0,
+      total: Number(total) || 0,
+      pct: Number(pct) || 0,
+      time_taken_sec: Number(time_taken_sec) || 0,
+      completed_at: new Date().toISOString(),
+    };
+    attempts.push(attempt);
+    save(KEYS.testAttempts, attempts);
+
+    // Connect tests to the existing progress systems:
+    // 1. Activity minutes drive the dashboard streak.
+    LocalStore.logStudentActivity(2);
+    // 2. First completed test unlocks the Test Champion badge.
+    LocalStore.awardStudentAchievement('Test Champion');
+
+    emit();
+    return attempt;
   },
 
   // ----- Reset -----

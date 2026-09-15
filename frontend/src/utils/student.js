@@ -175,6 +175,66 @@ export function langLabel(code) {
 }
 
 /* -------------------------------------------------------------------------
+ * Student Tests
+ * Tests reuse the same adaptive scorer as learning content (utils/adaptive.js):
+ * language + skill/gap + level→difficulty + age + grade.
+ * ------------------------------------------------------------------------- */
+
+/** All tests, scored for the logged-in student (same model as content). */
+export function getMyTests() {
+  const student = getCurrentStudent();
+  if (!student) return [];
+  const attempts = LocalStore.getTestAttempts().filter(
+    (a) => String(a.student_id) === String(student._id)
+  );
+  return LocalStore.getTests()
+    .map((t) => ({
+      test: t,
+      // Tests carry a single `grade`; shape it like content.grades for the scorer
+      ...scoreContentForStudent({ ...t, grades: [String(t.grade)] }, student),
+      attempts: attempts.filter((a) => String(a.test_id) === String(t._id)),
+    }))
+    .sort((a, b) => b.score - a.score);
+}
+
+/** Top tests the student hasn't attempted yet — drives "Recommended Tests". */
+export function getRecommendedTests(limit = 3) {
+  return getMyTests()
+    .filter((t) => t.attempts.length === 0)
+    .slice(0, limit);
+}
+
+/**
+ * Learning content that targets the skills behind the student's test
+ * mistakes. Reuses scoreContentForStudent for consistent ordering.
+ */
+export function getContentForTestSkills(tests) {
+  const student = getCurrentStudent();
+  const content = LocalStore.getContent();
+  if (!student || !content.length) return [];
+
+  // Skills from missed questions; fall back to the test's own skill.
+  const missedSkills = new Set();
+  tests.forEach((t) => {
+    const questions = t.test?.questions || [];
+    (t.attempt?.answers || []).forEach((ans, idx) => {
+      if (questions[idx] && ans !== questions[idx].answer) {
+        missedSkills.add(questions[idx].skill || t.test.skill);
+      }
+    });
+  });
+
+  return content
+    .map((c) => ({
+      content: c,
+      ...scoreContentForStudent(c, student),
+      forMissedSkill: missedSkills.has(c.skill),
+    }))
+    .sort((a, b) => (b.forMissedSkill - a.forMissedSkill) || (b.score - a.score))
+    .slice(0, 3);
+}
+
+/* -------------------------------------------------------------------------
  * One-call derivation for the Student Dashboard
  * ------------------------------------------------------------------------- */
 
