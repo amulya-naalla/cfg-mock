@@ -728,36 +728,31 @@ const KEYS = {
   studentProgress: 'CFG_STUDENT_PROGRESS_V1',
   studentActivity: 'CFG_STUDENT_ACTIVITY_V1',
   studentAchievements: 'CFG_STUDENT_ACHIEVEMENTS_V1',
+  messages: 'CFG_MESSAGES_V1',
 };
 
-const clone = (x) => JSON.parse(JSON.stringify(x));
-
-export const INITIAL_CHATS = [
+const INITIAL_MESSAGES = [
   {
-    _id: 'chat-1',
+    _id: 'msg-1',
     student_id: 'stu-101',
     sender: 'educator',
-    text: 'Hello Aarav! Great job completing the Math Addition Pack today! How did you find the Carry-Over questions?',
-    timestamp: '10:15 AM',
-    date: new Date().toISOString(),
+    sender_name: 'Rohan Sharma (Teacher)',
+    text: 'Hello Aarav! How are you progressing with your Math worksheets today?',
+    language: 'mr',
+    timestamp: '2026-09-15T10:00:00.000Z',
   },
   {
-    _id: 'chat-2',
+    _id: 'msg-2',
     student_id: 'stu-101',
     sender: 'student',
-    text: 'Thank you Rohan Sir! Question 3 was a little tricky, but I got 100% on practice!',
-    timestamp: '10:18 AM',
-    date: new Date().toISOString(),
-  },
-  {
-    _id: 'chat-3',
-    student_id: 'stu-101',
-    sender: 'educator',
-    text: 'Excellent effort! I assigned a new Marathi Reading Story for you. Feel free to ask me if you have any questions!',
-    timestamp: '10:20 AM',
-    date: new Date().toISOString(),
+    sender_name: 'Aarav Patil',
+    text: 'नमस्कार रोहन सर! मी गणिताचे प्रश्न सोडवत आहे.',
+    language: 'mr',
+    timestamp: '2026-09-15T10:05:00.000Z',
   },
 ];
+
+const clone = (x) => JSON.parse(JSON.stringify(x));
 
 function load(key, fallback) {
   try {
@@ -828,29 +823,6 @@ export const LocalStore = {
       return students[idx];
     }
     return null;
-  },
-
-  // ----- Teacher - Student Chat -----
-  getChatMessages(studentId) {
-    const all = load('cfg_chat_messages', INITIAL_CHATS);
-    if (!studentId) return all;
-    return all.filter((c) => String(c.student_id) === String(studentId));
-  },
-
-  sendChatMessage({ student_id, sender, text }) {
-    const chats = load('cfg_chat_messages', INITIAL_CHATS);
-    const msg = {
-      _id: 'chat-' + Date.now(),
-      student_id,
-      sender, // 'student' | 'educator'
-      text,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      date: new Date().toISOString(),
-    };
-    chats.push(msg);
-    save('cfg_chat_messages', chats);
-    emit();
-    return msg;
   },
 
   // ----- Assessments -----
@@ -1014,6 +986,29 @@ export const LocalStore = {
     save(KEYS.studentAchievements, list);
     emit();
     return existing;
+  },
+
+  // ----- Messages (2-Way Chat) -----
+  getMessages(studentId = 'stu-101') {
+    const all = load(KEYS.messages, INITIAL_MESSAGES);
+    return all.filter((m) => String(m.student_id) === String(studentId));
+  },
+
+  sendMessage({ student_id, sender, sender_name, text, language = 'en' }) {
+    const all = load(KEYS.messages, INITIAL_MESSAGES);
+    const newMsg = {
+      _id: 'msg-' + Date.now(),
+      student_id: student_id || 'stu-101',
+      sender: sender || 'student',
+      sender_name: sender_name || 'Student',
+      text,
+      language,
+      timestamp: new Date().toISOString(),
+    };
+    all.push(newMsg);
+    save(KEYS.messages, all);
+    emit();
+    return newMsg;
   },
 
   // ----- Reset -----

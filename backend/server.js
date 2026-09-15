@@ -12,6 +12,7 @@ const contentRouter = require('./routes/content');
 const dashboardRouter = require('./routes/dashboard');
 const parentSummaryRouter = require('./routes/parentSummary');
 const testTranslateRouter = require('./routes/testTranslate');
+const messagesRouter = require('./routes/messages');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/interventions', interventionsRouter);
 app.use('/api/educators', educatorsRouter);
 app.use('/api/content', contentRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/messages', messagesRouter);
 app.use('/api/_test', testTranslateRouter);
 
 app.get('/api/health', (req, res) => {
