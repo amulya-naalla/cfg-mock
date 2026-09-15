@@ -10,6 +10,7 @@ const contentRouter = require('./routes/content');
 const dashboardRouter = require('./routes/dashboard');
 const parentSummaryRouter = require('./routes/parentSummary');
 const testTranslateRouter = require('./routes/testTranslate');
+const telegramRouter = require('./routes/telegram');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/api/content', contentRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/_test', testTranslateRouter);
+app.use('/api/telegram', telegramRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

@@ -9,6 +9,7 @@ const studentSchema = new mongoose.Schema(
     language_pref: { type: String, default: 'ta' },
     guardian_name: { type: String },
     guardian_contact: { type: String },
+    parent_telegram_chat_id: { type: String },
   },
   {
     timestamps: true,
