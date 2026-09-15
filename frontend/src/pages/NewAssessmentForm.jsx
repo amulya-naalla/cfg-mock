@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import client, { GRADE_BENCHMARKS, SUBJECTS } from '../api/client.js';
 
+const SUBJECT_ICON = { Math: '🔢', Reading: '📖', Science: '🔬', English: '✏️', Tamil: '🇮🇳' };
+
 export default function NewAssessmentForm() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -70,6 +72,9 @@ export default function NewAssessmentForm() {
 
   const studentGrade = selectedStudent?.grade || '3';
   const expectedBenchmark = GRADE_BENCHMARKS[studentGrade] || 45;
+  // Local preview only — the server recomputes flagged authoritatively on save
+  // (FLAG_THRESHOLD_DIFF = 15). Educators may see this directly; parents never do.
+  const willFlag = form.score !== '' && !isNaN(form.score) && Number(form.score) < expectedBenchmark - 15;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -102,7 +107,7 @@ export default function NewAssessmentForm() {
 
       // Smooth redirect back to Student Detail to see updated score per spec
       setTimeout(() => {
-        navigate(`/students/${form.student_id}`);
+        navigate(`/educator/students/${form.student_id}`);
       }, 700);
     } catch (err) {
       console.error('Failed to submit assessment', err);
@@ -115,7 +120,7 @@ export default function NewAssessmentForm() {
     <div className="new-assessment-page">
       <div className="top-nav-bar">
         <Link
-          to={form.student_id ? `/students/${form.student_id}` : '/'}
+          to={form.student_id ? `/educator/students/${form.student_id}` : '/educator/students'}
           className="back-link"
         >
           <span>←</span> <span>Cancel</span>
@@ -172,25 +177,27 @@ export default function NewAssessmentForm() {
             </select>
           </div>
 
-          {/* Subject Dropdown per spec */}
+          {/* Subject: radio buttons, not a dropdown (4 options, under the <7 rule) */}
           <div className="form-field">
-            <label className="field-label" htmlFor="subject-select">
-              Subject
-            </label>
-            <select
-              id="subject-select"
-              name="subject"
-              className="form-input select-input"
-              value={form.subject}
-              onChange={handleChange}
-              required
-            >
+            <span className="field-label">Subject</span>
+            <div className="radio-pill-row" role="radiogroup" aria-label="Subject">
               {SUBJECTS.map((sub) => (
-                <option key={sub} value={sub}>
-                  {sub}
-                </option>
+                <label
+                  key={sub}
+                  className={`radio-pill ${form.subject === sub ? 'is-selected' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="subject"
+                    value={sub}
+                    checked={form.subject === sub}
+                    onChange={handleChange}
+                  />
+                  <span aria-hidden="true">{SUBJECT_ICON[sub] || '📚'}</span>
+                  <span>{sub}</span>
+                </label>
               ))}
-            </select>
+            </div>
           </div>
 
           {/* Score Input */}
@@ -213,13 +220,26 @@ export default function NewAssessmentForm() {
             />
           </div>
 
-          {/* Benchmark Explanation Box */}
-          <div className="benchmark-hint-box">
-            <span>💡</span>
-            <span>
-              Expected benchmark for Grade {studentGrade}: <strong>{expectedBenchmark} pts</strong>.
-              Flag status is computed server-side on submission.
-            </span>
+          {/* Check-before-submit summary: field staff enter fast, so show exactly
+              what is about to be saved in one glance. */}
+          <div className="submit-summary" aria-live="polite">
+            <div className="submit-summary-title">Check before saving</div>
+            <dl className="submit-summary-list">
+              <div><dt>Student</dt><dd>{selectedStudent?.name || '—'}</dd></div>
+              <div><dt>Subject</dt><dd>{form.subject}</dd></div>
+              <div><dt>Score</dt><dd>{form.score === '' ? '—' : `${form.score} / 100`}</dd></div>
+              <div><dt>Grade {studentGrade} target</dt><dd>{expectedBenchmark} pts</dd></div>
+            </dl>
+            {form.score !== '' && !isNaN(form.score) && (
+              <div className={`submit-summary-flag ${willFlag ? 'is-flagged' : 'is-ok'}`}>
+                <span aria-hidden="true">{willFlag ? '🚩' : '✓'}</span>
+                <span>
+                  {willFlag
+                    ? 'Will be marked as needing support'
+                    : 'Meets the grade benchmark'}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Actions */}
@@ -227,7 +247,7 @@ export default function NewAssessmentForm() {
             <button
               type="button"
               className="btn-secondary"
-              onClick={() => navigate(form.student_id ? `/students/${form.student_id}` : '/')}
+              onClick={() => navigate(form.student_id ? `/educator/students/${form.student_id}` : '/educator/students')}
             >
               Cancel
             </button>

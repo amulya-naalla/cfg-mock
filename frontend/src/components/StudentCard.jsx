@@ -5,7 +5,7 @@ export default function StudentCard({ student }) {
   const isFlagged = Boolean(student.flagged);
 
   return (
-    <Link to={`/students/${id}`} className={`student-card ${isFlagged ? 'is-flagged' : ''}`}>
+    <Link to={`/educator/students/${id}`} className={`student-card ${isFlagged ? 'is-flagged' : ''}`}>
       <span
         className={`status-dot ${isFlagged ? 'status-dot-danger' : 'status-dot-success'}`}
         role="img"

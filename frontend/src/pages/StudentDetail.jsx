@@ -88,7 +88,7 @@ export default function StudentDetail() {
       <div className="empty-state">
         <div className="empty-state-icon">⚠️</div>
         <div className="empty-state-title">Student Not Found</div>
-        <Link to="/" className="btn-primary" style={{ display: 'inline-block', marginTop: '14px' }}>
+        <Link to="/educator/students" className="btn-primary" style={{ display: 'inline-block', marginTop: '14px' }}>
           Back to Students
         </Link>
       </div>
@@ -107,7 +107,7 @@ export default function StudentDetail() {
     <div className="student-detail-page">
       {/* Top Back Navigation */}
       <div className="top-nav-bar">
-        <Link to="/" className="back-link">
+        <Link to="/educator/students" className="back-link">
           <span>←</span> <span>All Students</span>
         </Link>
         <span className="student-id-pill">ID: {id}</span>
@@ -171,7 +171,7 @@ export default function StudentDetail() {
       <div className="action-toolbar">
         {/* Big + New Assessment Button */}
         <Link
-          to={`/assessments/new?student_id=${id}&cluster=${encodeURIComponent(student?.cluster || 'North-2')}`}
+          to={`/educator/assessments/new?student_id=${id}&cluster=${encodeURIComponent(student?.cluster || 'North-2')}`}
           className="btn-primary-big"
         >
           <span style={{ fontSize: '20px', lineHeight: 1 }}>+</span>
@@ -182,7 +182,7 @@ export default function StudentDetail() {
         <div className="secondary-btn-row">
           {/* Person C: Localized Lesson Handoff */}
           <Link
-            to={`/content?lang=${encodeURIComponent(student?.language || 'hi')}`}
+            to={`/educator/content?lang=${encodeURIComponent(student?.language || 'hi')}`}
             className="btn-secondary"
             title="View localized lesson on Person C content screen"
           >

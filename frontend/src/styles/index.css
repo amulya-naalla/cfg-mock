@@ -5423,3 +5423,91 @@ button {
   .stu-lesson-picker { flex-direction: column; }
   .stu-lesson-btn { width: 100%; }
 }
+
+/* ── Educator data entry: single column, radio pills, check-before-submit ── */
+.assessment-form { display: flex; flex-direction: column; gap: 20px; }
+
+.radio-pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+
+.radio-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 2px solid var(--color-border-dark, #cbd5e1);
+  background: var(--color-surface, #fff);
+  font-weight: 650;
+  cursor: pointer;
+}
+.radio-pill input { position: absolute; opacity: 0; width: 0; height: 0; }
+.radio-pill.is-selected {
+  border-color: var(--color-primary, #2563eb);
+  background: var(--color-primary-light, #eff6ff);
+  color: var(--color-primary-hover, #1d4ed8);
+}
+.radio-pill:focus-within { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+.submit-summary {
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: #f8fafc;
+}
+.submit-summary-title {
+  font-size: 12px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .05em; color: var(--color-text-muted, #64748b); margin-bottom: 10px;
+}
+.submit-summary-list { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.submit-summary-list > div { display: flex; justify-content: space-between; gap: 16px; }
+.submit-summary-list dt { color: var(--color-text-muted, #64748b); font-size: 14px; }
+.submit-summary-list dd { margin: 0; font-weight: 700; text-align: right; }
+
+.submit-summary-flag {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 14px; padding: 10px 12px; border-radius: 9px;
+  font-weight: 700; font-size: 14px;
+}
+.submit-summary-flag.is-flagged { background: #fef2f2; color: #b91c1c; }
+.submit-summary-flag.is-ok { background: #ecfdf5; color: #047857; }
+
+/* one clear primary action */
+.form-btn-row { display: flex; gap: 12px; align-items: center; }
+.form-btn-row .btn-primary { flex: 1; min-height: 52px; font-size: 16px; }
+.form-btn-row .btn-secondary { min-height: 52px; }
+
+@media (max-width: 560px) {
+  .form-btn-row { flex-direction: column-reverse; }
+  .form-btn-row .btn-primary, .form-btn-row .btn-secondary { width: 100%; }
+  .radio-pill { flex: 1 1 calc(50% - 10px); justify-content: center; }
+}
+
+/* ── Educator: 44px minimum touch targets (field staff, low-end devices) ── */
+.app-nav .nav-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header-status-badge-btn { min-height: 44px; }
+
+.search-input,
+.select-control,
+.flagged-toggle-btn,
+.form-input,
+.select-input {
+  min-height: 44px;
+}
+
+.btn-primary,
+.btn-secondary {
+  min-height: 44px;
+}
+
+/* higher-contrast muted text for outdoor/low-end screens */
+.student-meta-row .meta-tag,
+.detail-label,
+.list-meta-bar {
+  color: #475569;
+}
