@@ -4,6 +4,7 @@ const connectDB = require('../config/db');
 const Student = require('../models/Student');
 const Assessment = require('../models/Assessment');
 const Content = require('../models/Content');
+const { translateText } = require('../services/translate');
 const Session = require('../models/Session');
 const { FLAG_THRESHOLD_DIFF } = require('../controllers/assessmentController');
 
@@ -313,6 +314,33 @@ async function seed() {
     },
   ]);
   console.log(`Seeded ${content.length} content lessons.`);
+
+  // Pre-cache Tamil so a fresh seed doesn't leave the app showing
+  // "Translation pending" during a demo. translateText falls back to returning
+  // the SOURCE text when MyMemory is unreachable or rejects the langpair, so
+  // only cache a result that actually differs from the English source —
+  // otherwise we'd store English under a Tamil heading.
+  console.log('Pre-caching Tamil translations...');
+  let cached = 0;
+  for (const lesson of content) {
+    try {
+      const translated = await translateText(lesson.original_text, 'ta');
+      if (translated && translated.trim() !== lesson.original_text.trim()) {
+        lesson.localized_text = { ...(lesson.localized_text || {}), ta: translated };
+        lesson.markModified('localized_text');
+        await lesson.save();
+        cached += 1;
+      } else {
+        console.warn(`  ! "${lesson.title}": no usable Tamil returned, left uncached.`);
+      }
+    } catch (err) {
+      console.warn(`  ! "${lesson.title}": translation failed (${err.message}), left uncached.`);
+    }
+  }
+  console.log(`Cached Tamil for ${cached}/${content.length} lessons.`);
+  if (cached < content.length) {
+    console.warn('Run: curl -X POST "http://localhost:5000/api/content/translate-all?lang=ta" once online.');
+  }
 
   console.log('Seed completed successfully!');
   await mongoose.disconnect();
