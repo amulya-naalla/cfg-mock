@@ -1,15 +1,31 @@
 const Student = require('../models/Student');
 const Assessment = require('../models/Assessment');
+const { translateText } = require('../services/translate');
 
-// TODO(C): replace with a real AI-generated summary
 async function generateParentSummary(req, res) {
   const student = await Student.findById(req.params.id);
   if (!student) return res.status(404).json({ error: 'Student not found' });
 
-  const assessments = await Assessment.find({ student_id: student._id });
-  const summary = `${student.name} has completed ${assessments.length} assessment(s).`;
+  const [latest] = await Assessment.find({ student_id: student._id }).sort({ createdAt: -1 }).limit(1);
 
-  res.json({ student_id: student._id, summary });
+  let summary_en;
+  if (!latest) {
+    summary_en = `${student.name} (Grade ${student.grade_level}) hasn't completed any assessments yet.`;
+  } else {
+    const note = latest.flagged ? "let's keep practicing." : 'great improvement!';
+    summary_en = `${student.name} (Grade ${student.grade_level}) scored ${latest.score}/100 in ${latest.subject} this week — ${note}`;
+  }
+
+  const language = student.language_pref || 'en';
+  const summary_localized = language === 'en' ? summary_en : await translateText(summary_en, language);
+
+  res.json({
+    studentId: student._id,
+    name: student.name,
+    summary_en,
+    summary_localized,
+    language,
+  });
 }
 
 module.exports = { generateParentSummary };

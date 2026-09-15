@@ -8,6 +8,7 @@ const assessmentsRouter = require('./routes/assessments');
 const contentRouter = require('./routes/content');
 const dashboardRouter = require('./routes/dashboard');
 const parentSummaryRouter = require('./routes/parentSummary');
+const testTranslateRouter = require('./routes/testTranslate');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api/students', parentSummaryRouter);
 app.use('/api/assessments', assessmentsRouter);
 app.use('/api/content', contentRouter);
 app.use('/api/dashboard', dashboardRouter);
+app.use('/api/_test', testTranslateRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
