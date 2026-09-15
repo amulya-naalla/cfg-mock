@@ -41,10 +41,12 @@ const MOCK_CHILDREN = [
 
 const LANG_LABEL = { en: "English", hi: "Hindi", ta: "Tamil", te: "Telugu", kn: "Kannada" };
 
+// Parent-facing palette deliberately excludes alarm red: the lowest band is a
+// supportive amber, so a child is never presented to their parent as an error.
 function scoreColor(s) {
   if (s >= 70) return "#1bbc9d";
-  if (s >= 50) return "#f4a536";
-  return "#e05c5c";
+  if (s >= 50) return "#4a90b8";
+  return "#b9791f";
 }
 
 function ScoreRing({ score, size = 56 }) {
@@ -159,6 +161,17 @@ export default function ParentHome() {
     setChildren(null);
   }
 
+  const filtered = useMemo(() => {
+    if (!children) return [];
+    const t = search.trim().toLowerCase();
+    if (!t) return children;
+    return children.filter((c) =>
+      c.name?.toLowerCase().includes(t) ||
+      c.grade?.toLowerCase().includes(t) ||
+      c.cluster?.toLowerCase().includes(t)
+    );
+  }, [children, search]);
+
   if (!parentPhone) {
     return (
       <div className="par-page par-identity-gate">
@@ -180,17 +193,6 @@ export default function ParentHome() {
       </div>
     );
   }
-
-  const filtered = useMemo(() => {
-    if (!children) return [];
-    const t = search.trim().toLowerCase();
-    if (!t) return children;
-    return children.filter((c) =>
-      c.name?.toLowerCase().includes(t) ||
-      c.grade?.toLowerCase().includes(t) ||
-      c.cluster?.toLowerCase().includes(t)
-    );
-  }, [children, search]);
 
   return (
     <div className="par-page">
@@ -261,11 +263,11 @@ export default function ParentHome() {
           </div>
           <div className="par-stat-chip par-stat-chip--green">
             <span className="par-stat-chip-num">{children.filter((c) => !c.flagged).length}</span>
-            <span className="par-stat-chip-lbl">On Track</span>
+            <span className="par-stat-chip-lbl">Going strong</span>
           </div>
           <div className="par-stat-chip par-stat-chip--red">
             <span className="par-stat-chip-num">{children.filter((c) => c.flagged).length}</span>
-            <span className="par-stat-chip-lbl">Need Support</span>
+            <span className="par-stat-chip-lbl">Extra practice</span>
           </div>
           <div className="par-stat-chip par-stat-chip--blue">
             <span className="par-stat-chip-num">
@@ -321,7 +323,7 @@ export default function ParentHome() {
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M4 3v18M4 4h13l-2.5 3.5L17 11H4" />
                     </svg>
-                    Needs Support
+                    Extra practice
                   </div>
                 )}
 

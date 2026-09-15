@@ -4558,12 +4558,12 @@ button {
   gap: 0.5rem;
   padding: 0.55rem 0.9rem;
   border-radius: var(--radius-sm);
-  background: var(--critical-wash);
-  color: #8a1f1f;
+  background: #f2f9f6;
+  color: #1f5c47;
   font-size: 0.86rem;
   font-weight: 600;
   margin-bottom: 1.25rem;
-  border-left: 3px solid var(--critical);
+  border-left: 3px solid #1bbc9d;
 }
 
 /* ── stats strip ───────────────────────────────────────────── */
@@ -4645,7 +4645,9 @@ button {
 }
 
 .par-child-card--flagged {
-  border-color: var(--critical);
+  /* Supportive amber, not alarm red — a parent should not see their own
+     child's card styled as an error state. */
+  border-color: #d9a441;
   border-width: 1.5px;
 }
 
@@ -4653,7 +4655,7 @@ button {
 .par-flag-ribbon {
   position: absolute;
   top: 0; right: 0;
-  background: var(--critical);
+  background: #b9791f;
   color: #fff;
   font-size: 0.62rem;
   font-weight: 700;
@@ -4985,8 +4987,9 @@ button {
 }
 
 .par-status-badge--risk {
-  background: var(--critical-wash);
-  color: var(--critical);
+  /* supportive amber, not alarm red (parent-facing) */
+  background: #fdf5e6;
+  color: #8a5a15;
 }
 
 /* ── AI summary panel ──────────────────────────────────────── */

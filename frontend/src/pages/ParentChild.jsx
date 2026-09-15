@@ -50,15 +50,18 @@ function fallbackAssessments(id) {
 function initials(name) {
   return (name ?? "?").split(" ").filter(Boolean).slice(0, 2).map((p) => p[0].toUpperCase()).join("");
 }
+// Parent-facing palette deliberately excludes alarm red (see ParentHome).
 function scoreColor(s) {
   if (s >= 70) return "#1bbc9d";
-  if (s >= 50) return "#f4a536";
-  return "#e05c5c";
+  if (s >= 50) return "#4a90b8";
+  return "#b9791f";
 }
+// Parent-facing wording: conveys the same signal without labelling the child
+// as deficient (no "flagged"/"at risk"/"below grade" language for parents).
 function scoreLabel(s) {
-  if (s >= 70) return "On track";
-  if (s >= 50) return "Watch";
-  return "Needs support";
+  if (s >= 70) return "Going strong";
+  if (s >= 50) return "Making progress";
+  return "Building foundations";
 }
 const LANG_LABEL = { en: "English", hi: "Hindi", ta: "Tamil", te: "Telugu", kn: "Kannada" };
 
@@ -231,8 +234,13 @@ export default function ParentChild() {
         throw new Error('API not available, received HTML fallback');
       }
       
-      setStudent(stuRes.data ?? fallbackStudent(studentId));
-      setAssessments(Array.isArray(assRes.data) ? assRes.data : (assRes.data?.assessments ?? fallbackAssessments(studentId)));
+      const asms = Array.isArray(assRes.data) ? assRes.data : (assRes.data?.assessments ?? fallbackAssessments(studentId));
+      const stu = stuRes.data ?? fallbackStudent(studentId);
+      // `flagged` lives on assessments, not on the student doc — derive it from the
+      // most recent one, otherwise this always rendered the "all good" state.
+      const latest = asms[asms.length - 1];
+      setStudent({ ...stu, flagged: latest ? Boolean(latest.flagged) : Boolean(stu.flagged) });
+      setAssessments(asms);
     } catch {
       setStudent(fallbackStudent(studentId));
       setAssessments(fallbackAssessments(studentId));
@@ -318,13 +326,14 @@ export default function ParentChild() {
         </div>
       </header>
 
-      {/* flagged alert */}
+      {/* Supportive note for parents — actionable, never deficit-framed. */}
       {student?.flagged && (
         <div className="par-alert-banner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8">
-            <path d="M4 3v18M4 4h13l-2.5 3.5L17 11H4" />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
           </svg>
-          This student has been flagged and may need additional support.
+          {student.name?.split(" ")[0] || "Your child"} is building strong foundations this term —
+          their educator has extra practice planned.
         </div>
       )}
 
@@ -417,7 +426,7 @@ export default function ParentChild() {
           <div className="nd-card-header">
             <h2 className="nd-section-title">Profile</h2>
             <span className={`par-status-badge ${student?.flagged ? "par-status-badge--risk" : "par-status-badge--ok"}`}>
-              {student?.flagged ? "Needs Support" : "On Track"}
+              {student?.flagged ? "Extra practice this week" : "Going strong"}
             </span>
           </div>
 
