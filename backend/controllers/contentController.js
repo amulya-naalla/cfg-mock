@@ -3,6 +3,14 @@ const Content = require('../models/Content');
 const { translateText } = require('../services/translate');
 const { getStudentPace, maxDepthForPace } = require('../services/pace');
 
+// Minimal list endpoint so the frontend has something to pick a lesson from —
+// not in the original contract, added because there was no way to enumerate
+// content otherwise. Flagged to the team; only exposes title/subject/grade_level.
+async function listContent(req, res) {
+  const contents = await Content.find({}, 'title subject grade_level');
+  res.json(contents);
+}
+
 async function getContent(req, res) {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: 'Invalid content id format' });
@@ -106,4 +114,4 @@ async function submitQuiz(req, res) {
   res.json({ score, total: content.quiz.length, results });
 }
 
-module.exports = { getContent, translateContent, translateAll, submitQuiz };
+module.exports = { listContent, getContent, translateContent, translateAll, submitQuiz };

@@ -1,9 +1,10 @@
 const express = require('express');
-const { getContent, translateContent, translateAll, submitQuiz } = require('../controllers/contentController');
+const { listContent, getContent, translateContent, translateAll, submitQuiz } = require('../controllers/contentController');
 const asyncHandler = require('../utils/asyncHandler');
 
 const router = express.Router();
 
+router.get('/', asyncHandler(listContent));
 router.post('/translate-all', asyncHandler(translateAll));
 router.get('/:id', asyncHandler(getContent));
 router.post('/:id/translate', asyncHandler(translateContent));
